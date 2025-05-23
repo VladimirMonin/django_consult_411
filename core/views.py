@@ -5,4 +5,7 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse('<h1>Приветствуем в барбершопе "Арбуз"!!!</h1>')
+    context = {
+        "name": "Арбуз"
+    }
+    return render(request, 'first_template.html', context)
