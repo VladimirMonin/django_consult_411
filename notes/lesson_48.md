@@ -44,3 +44,21 @@ poetry run python manage.py startapp core
 Проект будет выглядеть примерно так:
 
 ![start_structure](./images/start_structure.png)
+
+## Подключение приложения core к проекту
+
+Начнем с того, что мы создадим приложение core и подключим его к проекту. Для этого нужно добавить его в `INSTALLED_APPS` в файле `settings.py`:
+
+```python
+# barbershop/settings.py
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    # Добавляем наше приложение (ПОСЛЕ всех встроенных приложений)
+    'core.apps.core',
+]
+```
