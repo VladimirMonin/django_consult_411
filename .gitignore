@@ -1,2 +1,4 @@
 .venv
 *__pycache__
+notes/images/
+db.sqlite3
