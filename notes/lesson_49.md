@@ -192,6 +192,40 @@ poetry add --dev debugpy
 - Включают все символы этих пакетов для автодополнения
 - Значительно улучшают подсказки при работе с Django моделями, формами и ORM
 
+### Базовые настройки Emmet для Django
+```json
+"emmet.includeLanguages": {
+  "django-html": "html"
+}
+```
+Активирует поддержку Emmet в шаблонах Django, позволяя использовать сокращения HTML.
+
+Но можно дать расширенные настройки Emmet для Django-шаблонов, чтобы улучшить работу с HTML и Django-тегами.
+```json
+"emmet.triggerExpansionOnTab": true,
+"emmet.showSuggestionsAsSnippets": true,
+"emmet.showExpandedAbbreviation": "always",
+"emmet.useInlineCompletions": true,
+"emmet.extensionsPath": [],
+"emmet.syntaxProfiles": {
+  "html": {
+    "filters.commentAfter": "<!-- /{[#]}/ -->",
+    "attributes": {
+      "class": "class",
+      "id": "id",
+      "for": "for"
+    }
+  },
+  "django-html": {
+    "filters.commentAfter": "{# /{[#]}/ #}"
+  }
+}
+```
+Особенно важны:
+
+`emmet.triggerExpansionOnTab: true` - позволяет разворачивать аббревиатуры Emmet нажатием Tab
+`emmet.syntaxProfiles` - настраивает Emmet для работы с Django-специфичными конструкциями, например комментарии в формате {# комментарий #}
+
 ### Преимущества расширения Django
 
 1. **Улучшенная работа с шаблонами**:
