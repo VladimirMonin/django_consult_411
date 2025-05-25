@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from core.views import index
+from core.views import index, master_detail
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -8,4 +8,5 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", index),
+    path("masters/<int:master_id>/", master_detail),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
