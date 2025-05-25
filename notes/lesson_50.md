@@ -202,3 +202,50 @@ urlpatterns = [
 - Используйте тег `{% static 'путь/к/файлу' %}` для генерации правильного URL к статическому файлу.
 - В режиме разработки (`DEBUG=True`) Django сам обслуживает статику из папок, указанных в `STATICFILES_DIRS` и папок `static` приложений.
 - В продакшене используйте команду `collectstatic`, чтобы собрать все статические файлы в папку `STATIC_ROOT`, откуда их будет обслуживать веб-сервер.
+
+## Переменные окружения 
+
+poetry add python-dotenv
+.env
+.env.example
+
+
+## Конвертеры путей в Django
+
+Все пути нашего сайта в Django распологаются в `urls.py`. И сейчас у нас это выглядит так:
+
+```python
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", index),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+```
+
+Мы можем добавить пути формата `thanks` или `about` или же `masters` для отображения разной информации.
+Но что если нам надо будет вывести информацию о мастере по его имени или id?
+
+Допустим возьмем `id`. Как нам из маршрута получить id мастера и вывести его информацию?
+
+Для этого мы можем использовать конвертеры путей в Django. Конвертеры позволяют извлекать переменные из URL и передавать их в представление.
+
+```python
+urlpatterns = [
+    path("masters/<int:master_id>/", master_detail, name="master_detail"),
+]
+```
+
+Для такого маршрута потребуется специальная функция представления `master_detail`, которая будет принимать параметр `id` и обрабатывать запрос:
+
+```python
+def master_detail(request, master_id):
+    # Здесь можно получить информацию о мастере по его id
+    master = ...
+    return render(request, "master_detail.html", {"master": master})
+```
+
+Когда пользователь перейдет по URL, например, `/masters/1/`, Django вызовет функцию `master_detail` и передаст ей значения:
+
+```python
+# kwargs будет содержать {'request': request, 'master_id': 1}
+master_detail(**kwargs)
+```
