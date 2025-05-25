@@ -193,14 +193,17 @@ poetry add --dev debugpy
 - Значительно улучшают подсказки при работе с Django моделями, формами и ORM
 
 ### Базовые настройки Emmet для Django
+
 ```json
 "emmet.includeLanguages": {
   "django-html": "html"
 }
 ```
+
 Активирует поддержку Emmet в шаблонах Django, позволяя использовать сокращения HTML.
 
 Но можно дать расширенные настройки Emmet для Django-шаблонов, чтобы улучшить работу с HTML и Django-тегами.
+
 ```json
 "emmet.triggerExpansionOnTab": true,
 "emmet.showSuggestionsAsSnippets": true,
@@ -221,6 +224,7 @@ poetry add --dev debugpy
   }
 }
 ```
+
 Особенно важны:
 
 `emmet.triggerExpansionOnTab: true` - позволяет разворачивать аббревиатуры Emmet нажатием Tab
