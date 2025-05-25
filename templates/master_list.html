@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+{% for master in masters %}
+<p>
+    ID Мастера: {{ master.id }}<br>
+    Имя Мастера: {{ master.name }}<br>
+</p>
+{% endfor %}
+{% endblock content %}

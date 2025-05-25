@@ -25,3 +25,10 @@ def master_detail(request, master_id):
 
 
     return render(request, 'master_detail.html', context)
+
+
+def master_list(request):
+    context = {
+        "masters": masters,
+    }
+    return render(request, 'master_list.html', context)
