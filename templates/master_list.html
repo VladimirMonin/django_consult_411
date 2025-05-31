@@ -1,9 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
+
+{{masters.0.name}}
+{{masters.1.name}}
+{{masters.2.name}}
+
+<div class="row g-3">
 {% for master in masters %}
-<p>
-    ID Мастера: {{ master.id }}<br>
-    Имя Мастера: {{ master.name }}<br>
-</p>
+    <div class="col-12 col-md-6 col-lg-4">  
+        <div class="master-card">
+            <p> ID Мастера: {{ master.id }}</p>
+            <p> Имя Мастера: {{ master.name }}</p>
+        </div>
+    </div> 
 {% endfor %}
+</div>
+
 {% endblock content %}
