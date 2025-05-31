@@ -1,18 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Добро пожаловать в барбершоп "{{ name }}"!</h1>
-    <p>Эксперименты с типами данных</p>
+{% comment %} Эксперименты с BS5 системой колонок {% endcomment %}
+<div class="row">
+    <div class="col">1</div>
+    <div class="col">2</div>
+    <div class="col">3</div>
+</div>
+<div class="row">
+    <div class="col-8">8 из 12</div>
+    <div class="col">Остальное</div>
 
-    <p>1 эксперимент - Число. {{integer}} </p>
-    <p>2 эксперимент - Число с плавающей точкой. {{float}} </p>
-    <p>3 эксперимент - Строка. {{string}} </p>
-    <p>4 эксперимент - Список чисел. {{num_list}} </p>
-    <p>5 эксперимент - Словарь имен. {{name_dict}} </p>
-    <p>6 эксперимент - Множество строк. {{string_set}} </p>
-    <p>7 эксперимент - Объект имени. Мастер по имени: {{name_object}} </p>
-    <p>8 эксперимент - Список чисел. Элемент 0: {{num_list.0}} </p>
-    <p>9 эксперимент - Словарь имен. Имя по ключу: {{name_dict.name}} </p>
-    <p>10 эксперимент - Объект имени. Мастер по атрибуту имени: {{name_object.name}} </p>
-    <p>11 эксперимент - Объект имени. Вызов метода age_in_days: {{name_object.age_in_days}} </p>
+</div>
+<div class="row">
+    <div class="col-12 col-md-8">8 из 12</div>
+    <div class="col-12 col-md-4">Остальное</div>
+
+</div>
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-4">Блок 1</div>
+    <div class="col-12 col-md-6 col-lg-4">Блок 2</div>
+    <div class="col-12 col-md-6 col-lg-4">Блок 3</div>
+</div>
 {% endblock content %}
