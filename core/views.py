@@ -8,7 +8,11 @@ from .data import *
 
 def index(request):
     context = {
-        "name": "Арбуз",
+        "user": {
+            "name": "Сергей",
+            "age": 30,
+            "is_stuff": True
+        }
     }
     return render(request, 'first_template.html', context)
 

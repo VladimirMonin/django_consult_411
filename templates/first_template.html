@@ -1,25 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% comment %} Эксперименты с BS5 системой колонок {% endcomment %}
-<div class="row">
-    <div class="col">1</div>
-    <div class="col">2</div>
-    <div class="col">3</div>
-</div>
-<div class="row">
-    <div class="col-8">8 из 12</div>
-    <div class="col">Остальное</div>
+<h1>Эксперимент с условием шаблонизатора</h1>
 
+<div class="master-card">
+    <p>Имя: {{ user.name }}</p>
+    <p>Возраст: {{ user.age }}</p>
+    {% if user.is_stuff %}
+    {% comment %} BS5 бейдж {% endcomment %}
+    <p>Статус: <span class="badge bg-warning">Сотрудник</span></p>
+    {% elif user.is_admin %}
+    <p>Статус: <span class="badge bg-danger">Администратор</span></p>
+    {% else %}
+    <p>Статус: <span class="badge bg-secondary">Пользователь</span></p>
+    {% endif %}
 </div>
-<div class="row">
-    <div class="col-12 col-md-8">8 из 12</div>
-    <div class="col-12 col-md-4">Остальное</div>
 
-</div>
-<div class="row">
-    <div class="col-12 col-md-6 col-lg-4">Блок 1</div>
-    <div class="col-12 col-md-6 col-lg-4">Блок 2</div>
-    <div class="col-12 col-md-6 col-lg-4">Блок 3</div>
-</div>
 {% endblock content %}
