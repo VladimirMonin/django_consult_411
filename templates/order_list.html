@@ -5,19 +5,18 @@
     <h1>{{title}}</h1>
 </div>
 <div class="row g-3">
-{% for order in orders %}
-    <div class="col-12 col-md-6 col-lg-4">  
+{% for order in orders %}    <div class="col-12 col-md-6 col-lg-4">  
         <div class="master-card">
-            <h5>Заявка №{{ order.id }}</h5>
-            <p> Имя клиента: {{ order.client_name }}</p>
+            <h5><i class="bi bi-clipboard2-check text-primary"></i> Заявка №{{ order.id }}</h5>
+            <p><i class="bi bi-person-circle text-info"></i> Имя клиента: {{ order.client_name }}</p>
             {% comment %} Цикл для отрисовки услуг. BS5 бейджи {% endcomment %}
-            <p> Услуги:
+            <p><i class="bi bi-scissors text-warning"></i> Услуги:
             {% for service in order.services %}
                 <span class="badge bg-secondary">{{ service }}</span>
             {% endfor %}
             </p> 
             <p>
-            Статус заявки: 
+            <i class="bi bi-flag text-dark"></i> Статус заявки: 
             {% comment %} 
             Ветвление для статуса заявки всего их  
             STATUS_NEW = 'новая'
@@ -27,18 +26,18 @@
             {% endcomment %}
             <!-- Статус заявки -->
             {% if order.status == 'новая' %}
-                <span class="badge bg-primary">Новая</span>
+                <span class="badge bg-primary"><i class="bi bi-plus-circle"></i> Новая</span>
             {% elif order.status == 'подтвержденная' %}
-                <span class="badge bg-success">Подтвержденная</span>
+                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Подтвержденная</span>
             {% elif order.status == 'отмененная' %}
-                <span class="badge bg-danger">Отмененная</span>
+                <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Отмененная</span>
             {% elif order.status == 'выполненная' %}
-                <span class="badge bg-info">Выполненная</span>
+                <span class="badge bg-info"><i class="bi bi-check2-all"></i> Выполненная</span>
             {% else %}
-                <span class="badge bg-secondary">Неизвестный статус</span>
+                <span class="badge bg-secondary"><i class="bi bi-question-circle"></i> Неизвестный статус</span>
             {% endif %} 
             </p>
-            <p> Дата: {{ order.date }}</p>
+            <p><i class="bi bi-calendar3 text-success"></i> Дата: {{ order.date }}</p>
         </div>
     </div> 
 {% endfor %}
