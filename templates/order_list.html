@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+    <h1>{{title}}</h1>
+</div>
+<div class="row g-3">
+{% for order in orders %}
+    <div class="col-12 col-md-6 col-lg-4">  
+        <div class="master-card">
+            <h5>Заявка №{{ order.id }}</h5>
+            <p> Имя клиента: {{ order.client_name }}</p>
+            {% comment %} Цикл для отрисовки услуг. BS5 бейджи {% endcomment %}
+            <p> Услуги:
+            {% for service in order.services %}
+                <span class="badge bg-secondary">{{ service }}</span>
+            {% endfor %}
+            </p> 
+            <p>
+            Статус заявки: 
+            {% comment %} 
+            Ветвление для статуса заявки всего их  
+            STATUS_NEW = 'новая'
+            STATUS_CONFIRMED = 'подтвержденная'
+            STATUS_CANCELLED = 'отмененная'
+            STATUS_COMPLETED = 'выполненная'
+            {% endcomment %}
+            <!-- Статус заявки -->
+            {% if order.status == 'новая' %}
+                <span class="badge bg-primary">Новая</span>
+            {% elif order.status == 'подтвержденная' %}
+                <span class="badge bg-success">Подтвержденная</span>
+            {% elif order.status == 'отмененная' %}
+                <span class="badge bg-danger">Отмененная</span>
+            {% elif order.status == 'выполненная' %}
+                <span class="badge bg-info">Выполненная</span>
+            {% else %}
+                <span class="badge bg-secondary">Неизвестный статус</span>
+            {% endif %} 
+            </p>
+            <p> Дата: {{ order.date }}</p>
+        </div>
+    </div> 
+{% endfor %}
+</div>
+</div>
+{% endblock content %}

@@ -5,6 +5,13 @@ from django.http import HttpResponse
 from .data import *
 
 
+def order_list(request):
+    context = {
+        "orders": orders,
+        "title": "Список заявок",
+    }
+    return render(request, 'order_list.html', context)
+
 
 def index(request):
     context = {

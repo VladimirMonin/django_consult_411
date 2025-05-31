@@ -7,6 +7,9 @@ body {
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
     padding: 20px;
-    /* margin: 10px; */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Добавляем следующие свойства */
+    height: 100%;      /* Растягиваем карточку на всю высоту родителя */
+    display: flex;     /* Используем флексбокс для внутреннего контента */
+    flex-direction: column; /* Располагаем элементы в колонку */
 }
