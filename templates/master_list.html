@@ -7,13 +7,9 @@
 
 <div class="row g-3">
 {% for master in masters %}
-    <div class="col-12 col-md-6 col-lg-4">  
-        <div class="master-card">
-            <h5>Карточка №{{ forloop.counter }}</h5>
-            <p> ID Мастера: {{ master.id }}</p>
-            <p> Имя Мастера: {{ master.name }}</p>
-        </div>
-    </div> 
+{% include "master_card_include.html" with emp=master %}
+{% empty %}
+<p class="text-danger">Нет мастеров для отображения</p>
 {% endfor %}
 </div>
 
