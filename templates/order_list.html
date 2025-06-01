@@ -10,9 +10,11 @@
             <h5><i class="bi bi-clipboard2-check text-primary"></i> Заявка №{{ order.id }}</h5>
             <p><i class="bi bi-person-circle text-info"></i> Имя клиента: {{ order.client_name }}</p>
             {% comment %} Цикл для отрисовки услуг. BS5 бейджи {% endcomment %}
-            <p><i class="bi bi-scissors text-warning"></i> Услуги:
+            <p><i class="bi bi-scissors text-warning"> {{ order.services|length }}</i> Услуги:
             {% for service in order.services %}
                 <span class="badge bg-secondary">{{ service }}</span>
+            {% empty %}
+                <span class="badge bg-secondary">Нет услуг</span>
             {% endfor %}
             </p> 
             <p>
