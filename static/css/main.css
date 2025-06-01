@@ -1,15 +1,50 @@
 body {
-    background-color: rgb(218, 255, 255);
+  background-color: #f8f9fa;
+  font-family: "Roboto", sans-serif;
 }
 
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
 
+/* Стили для секций */
+section {
+  min-height: 50vh;
+  padding: 60px 0;
+  scroll-margin-top: 60px; /* Отступ для якорных ссылок */
+}
+
+/* Стили для карточек мастеров */
 .master-card {
-    background-color: rgb(255, 255, 255);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Добавляем следующие свойства */
-    height: 100%;      /* Растягиваем карточку на всю высоту родителя */
-    display: flex;     /* Используем флексбокс для внутреннего контента */
-    flex-direction: column; /* Располагаем элементы в колонку */
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Добавляем следующие свойства */
+  height: 100%; /* Растягиваем карточку на всю высоту родителя */
+  display: flex; /* Используем флексбокс для внутреннего контента */
+  flex-direction: column; /* Располагаем элементы в колонку */
+  transition: transform 0.3s ease-in-out;
+}
+
+.master-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Анимация для иконок в секции преимуществ */
+.bi {
+  transition: transform 0.3s ease;
+}
+
+.bi:hover {
+  transform: scale(1.2);
+}
+
+/* Стили для футера */
+footer {
+  background-color: #343a40;
+  color: white;
+  padding: 20px 0;
 }

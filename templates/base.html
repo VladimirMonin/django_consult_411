@@ -15,12 +15,9 @@
     {% comment %} Подключение своего main.css из статики {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <title>{{ title }}</title>
-  </head>
-  <body>
+  </head>  <body>
     <header>
-        <nav>
-            <p>Тут будет навигация</p>         
-        </nav>
+        {% include "nav_menu_include.html" %}
     </header>
     <main>
         <div class="container">
@@ -29,7 +26,7 @@
             {% endblock content %}
         </div>
     </main>
-    <footer>
+    <footer class="container mt-5 py-4 text-center border-top">
         {% block footer %}
             <p>Учебный проект python411</p>
             <p>2025 &copy; Все права защищены кем-то</p>
