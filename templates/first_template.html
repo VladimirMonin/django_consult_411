@@ -17,3 +17,10 @@
 </div>
 
 {% endblock content %}
+
+{% block footer %}
+{% comment %} super {% endcomment %}
+<p>ДО</p>
+{{ block.super }}
+<p>ПОСЛЕ</p>
+{% endblock footer %}
