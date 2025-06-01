@@ -10,7 +10,7 @@ def order_list(request):
         "orders": orders,
         "title": "Список заявок",
     }
-    return render(request, 'order_list.html', context)
+    return render(request, "order_list.html", context)
 
 
 def index(request):
@@ -18,28 +18,29 @@ def index(request):
         "user": {
             "name": "Сергей",
             "age": 30,
-            "is_stuff": True
-        }
+            "is_stuff": True,
+        },
+        "md": markdown_string,
     }
-    return render(request, 'first_template.html', context)
+    return render(request, "first_template.html", context)
+
 
 def master_detail(request, master_id):
     try:
-        master = [master for master in masters if master['id'] == master_id][0]
+        master = [master for master in masters if master["id"] == master_id][0]
 
     except IndexError:
         return HttpResponse("Мастер не найден", status=404)
-    
+
     context = {
         "master": master,
     }
 
-
-    return render(request, 'master_detail.html', context)
+    return render(request, "master_detail.html", context)
 
 
 def master_list(request):
     context = {
         "masters": masters,
     }
-    return render(request, 'master_list.html', context)
+    return render(request, "master_list.html", context)

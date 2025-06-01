@@ -110,3 +110,22 @@ orders = [
         "status": STATUS_COMPLETED
     }
 ]
+
+markdown_string = '''
+## Пример Markdown текста
+
+Это пример текста в формате Markdown, который будет преобразован в HTML.
+
+Нумерованный список:
+1. Первый пункт
+2. Второй пункт
+3. Третий пункт
+
+Однострочный код: `print("Hello, World!")`
+Многострочный код:
+
+```python
+def hello_world():
+    print("Hello, World!")
+```
+'''
