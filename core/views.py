@@ -4,17 +4,20 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .data import *
 
+# импорт функции reverse для создания URL-адресов
+from django.urls import reverse
+
 
 def get_main_menu():
     """Функция возвращает список пунктов меню для сайта"""
     return [
-        {"name": "Главная", "url": "/"},
-        {"name": "О нас", "url": "#about"},
-        {"name": "Преимущества", "url": "#benefits"},
-        {"name": "Мастера", "url": "#masters"},
-        {"name": "Услуги", "url": "#services"},
-        {"name": "Запись", "url": "#booking"},
-        {"name": "Управление", "url": "/orders/"},
+        {"name": "Главная", "url": reverse("landing")},
+        {"name": "О нас", "url": reverse("landing") + "#about"},
+        {"name": "Преимущества", "url": reverse("landing") + "#benefits"},
+        {"name": "Мастера", "url": reverse("landing") + "#masters"},
+        {"name": "Услуги", "url": reverse("landing") + "#services"},
+        {"name": "Запись", "url": reverse("landing") + "#booking"},
+        {"name": "Управление", "url": reverse("order_list")},
     ]
 
 
