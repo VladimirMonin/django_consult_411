@@ -57,3 +57,6 @@ def master_list(request):
 
 def thanks(request):
     return render(request, "thanks.html")
+
+def order_create(request):
+    return render(request, "order_form.html")
