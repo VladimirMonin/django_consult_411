@@ -5,27 +5,15 @@ from django.http import HttpResponse
 from .data import *
 
 # импорт функции reverse для создания URL-адресов
-from django.urls import reverse
 
 
-def get_main_menu():
-    """Функция возвращает список пунктов меню для сайта"""
-    return [
-        {"name": "Главная", "url": reverse("landing")},
-        {"name": "О нас", "url": reverse("landing") + "#about"},
-        {"name": "Преимущества", "url": reverse("landing") + "#benefits"},
-        {"name": "Мастера", "url": reverse("landing") + "#masters"},
-        {"name": "Услуги", "url": reverse("landing") + "#services"},
-        {"name": "Запись", "url": reverse("landing") + "#booking"},
-        {"name": "Управление", "url": reverse("order_list")},
-    ]
+
 
 
 def landing(request):
     """Главная страница сайта - лендинг"""
     context = {
         "title": "Барбершоп - стрижки и бритье",
-        "menu": get_main_menu(),
         "masters": masters[:3],  # Показываем только первые 3 мастера
         "services": services,
     }
@@ -36,7 +24,6 @@ def order_list(request):
     context = {
         "orders": orders,
         "title": "Список заявок",
-        "menu": get_main_menu(),
     }
     return render(request, "order_list.html", context)
 
@@ -56,7 +43,6 @@ def master_detail(request, master_id):
     context = {
         "master": master,
         "title": f"Мастер {master['name']}",
-        "menu": get_main_menu(),
     }
 
     return render(request, "master_detail.html", context)
@@ -66,6 +52,5 @@ def master_list(request):
     context = {
         "masters": masters,
         "title": "Наши мастера",
-        "menu": get_main_menu(),
     }
     return render(request, "master_list.html", context)
