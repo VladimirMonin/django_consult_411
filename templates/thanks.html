@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block header %}
+{% endblock header %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mt-5">
+                <div class="card-body text-center">
+                    <h1 class="card-title">Спасибо!</h1>
+                    <p class="card-text">Ваше сообщение было успешно отправлено.</p>
+                    <a href="{% url 'landing' %}" class="btn btn-dark">Вернуться на главную</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

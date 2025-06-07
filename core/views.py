@@ -54,3 +54,6 @@ def master_list(request):
         "title": "Наши мастера",
     }
     return render(request, "master_list.html", context)
+
+def thanks(request):
+    return render(request, "thanks.html")
