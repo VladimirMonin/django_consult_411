@@ -4,4 +4,4 @@ class Master(models.Model):
     first_name = models.CharField()
     last_name = models.CharField()
     middle_name = models.CharField()
-
+    phone = models.CharField(null=True, default=None)
