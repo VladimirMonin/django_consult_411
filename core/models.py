@@ -26,3 +26,10 @@ class Order(models.Model):
     phone = models.CharField(max_length=20, verbose_name="Телефон")
     comment = models.TextField(verbose_name="Комментарий", null=True, blank=True)
     master = models.ForeignKey(Master, verbose_name="Мастер", default=None, on_delete=models.SET_DEFAULT)
+
+
+# Простая выборка в shell plus
+# orders = Order.objects.all() - получаем QuerySet всех объектов - это служебная коллекция
+# Если попростить orders[0] - Мы получаем из коллекции экземпляр Order
+# orders[0].name - Фродо. Получили данные из поля
+# orders[0].master.first_name - Получаем данные из связанной модели
