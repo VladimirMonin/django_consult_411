@@ -194,3 +194,15 @@ class Master(models.Model):
 
 
 ## Подключим модель `Master` к админке
+
+
+from .models import Master
+
+
+# Сделать регистрацию самым простым способом
+admin.site.register(Master)
+
+
+![admin_master.png](./images/admin_master.png)
+
+Описание того что мы видим на русском языке и от куда это берется (с изображения)

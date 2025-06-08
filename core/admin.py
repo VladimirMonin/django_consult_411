@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Master
 
-# Register your models here.
+
+# Сделать регистрацию самым простым способом
+admin.site.register(Master)
+
