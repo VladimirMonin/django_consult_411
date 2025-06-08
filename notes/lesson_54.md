@@ -141,3 +141,56 @@ Django сгенерирует новый файл миграции (наприм
 `poetry run python manage.py createsuperuser`
 
 При выполнении этой команды вам будет предложено ввести имя пользователя, адрес электронной почты (необязательно) и пароль для новой учетной записи суперпользователя. После успешного создания вы сможете войти в административную панель Django (обычно доступную по адресу `/admin/` после запуска сервера разработки) и начать управлять данными ваших моделей.
+
+## Свойства полей
+
+### Большая сводная таблица типов полей
+В таблице должны быть следующие поля:
+- Название свойства
+- Описание свойства
+- Параметры которые туда можно вписать (max_length, null, blank и т.д.)
+
+
+
+- `CharField` - строка фиксированной длины
+- `EmailField` - строка для email
+
+
+### Большая сводная таблица характеристик полей
+
+- Название свойства
+- Описание свойства
+- В каких типах полей используется и для чего
+
+### `null = True` и `blank = True`
+
+Если мы не указываем `null=True` для поля, то Django по умолчанию устанавливает `null=False`. Это делает поле обязательным для заполнения при создании объекта модели.
+
+Что такое `blank=True` и чем отличается от `null=True`?
+
+### Можно ли поставить default=None но не ставить null=True?
+...
+
+## Завершили модель `Master`
+
+class Master(models.Model):
+    first_name = models.CharField(max_length=100, verbose_name="Имя")
+    last_name = models.CharField(max_length=100, verbose_name="Фамилия")
+    middle_name = models.CharField(
+        null=True, blank=True, max_length=100, verbose_name="Отчество"
+    )
+    phone = models.CharField(max_length=20, verbose_name="Телефон", default="00000000000")
+    email = models.EmailField(null=True, blank=True, verbose_name="Email")
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    class Meta:
+        # на русском языке - в ед. числе и мн. числе
+        verbose_name = "Мастер"
+        verbose_name_plural = "Мастера"
+        # сортировка по фамилии и имени
+        ordering = ["last_name", "first_name"]
+
+
+## Подключим модель `Master` к админке
