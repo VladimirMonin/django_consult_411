@@ -19,3 +19,10 @@ class Master(models.Model):
         verbose_name_plural = "Мастера"
         # сортировка по фамилии и имени
         ordering = ["last_name", "first_name"]
+
+
+class Order(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Имя")
+    phone = models.CharField(max_length=20, verbose_name="Телефон")
+    comment = models.TextField(verbose_name="Комментарий", null=True, blank=True)
+    master = models.ForeignKey(Master, verbose_name="Мастер", default=None, on_delete=models.SET_DEFAULT)
