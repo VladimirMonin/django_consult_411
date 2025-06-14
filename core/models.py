@@ -9,7 +9,6 @@ class Master(models.Model):
     )
     phone = models.CharField(max_length=20, verbose_name="Телефон", default="00000000000")
     email = models.EmailField(null=True, blank=True, verbose_name="Email")
-
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
