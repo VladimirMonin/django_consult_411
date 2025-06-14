@@ -25,7 +25,7 @@ class Order(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя")
     phone = models.CharField(max_length=20, verbose_name="Телефон")
     comment = models.TextField(verbose_name="Комментарий", null=True, blank=True)
-    master = models.ForeignKey(Master, verbose_name="Мастер", default=None, on_delete=models.SET_DEFAULT)
+    master = models.ForeignKey(Master, verbose_name="Мастер", default=None, on_delete=models.SET_DEFAULT, related_name="orders")
 
 
 # Простая выборка в shell plus
