@@ -4,3 +4,4 @@ notes/images/
 db.sqlite3
 static/images/logo.png
 .env
+media/

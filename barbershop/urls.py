@@ -22,4 +22,4 @@ urlpatterns = [
     path("orders/create/", order_create, name="order_create"),
     path("orders/", order_list, name="order_list"),
     path("thanks/", thanks, name="thanks"),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
