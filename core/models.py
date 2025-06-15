@@ -35,7 +35,6 @@ class Order(models.Model):
         related_name="orders",
     )
 
-
 """
 **Review (Отзыв)**
 
@@ -81,5 +80,28 @@ class Review(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     rating = models.PositiveSmallIntegerField(
-        verbose_name="Оценка", choices=RATING_CHOICES, default=5)
+        verbose_name="Оценка", choices=RATING_CHOICES, default=5
+    )
     is_published = models.BooleanField(default=False, verbose_name="Опубликован")
+
+
+"""
+**Service (Услуга)**
+
+- `name`: CharField (max_length=200, verbose_name="Название")
+- `description`: TextField (blank=True, verbose_name="Описание")
+- `price`: DecimalField (max_digits=10, decimal_places=2, verbose_name="Цена")
+- `duration`: PositiveIntegerField (verbose_name="Длительность", help_text="Время выполнения в минутах")
+- `is_popular`: BooleanField (default=False, verbose_name="Популярная услуга")
+- `image`: ImageField (upload_to="services/", blank=True, verbose_name="Изображение")
+"""
+
+
+class Service(models.Model):
+    name = models.CharField(max_length=200, verbose_name="Название")
+    description = models.TextField(blank=True, verbose_name="Описание")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
+    duration = models.PositiveIntegerField(
+        verbose_name="Длительность", help_text="Время выполнения в минутах", default=20
+    )
+    is_popular = models.BooleanField(default=False, verbose_name="Популярная услуга")
