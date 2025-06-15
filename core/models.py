@@ -39,17 +39,36 @@ class Order(models.Model):
 """
 **Review (Отзыв)**
 
-- `text`: TextField (verbose_name="Текст отзыва")
-- `client_name`: CharField (max_length=100, blank=True, verbose_name="Имя клиента")
-- `master`: ForeignKey (на мастера, on_delete=models.CASCADE, verbose_name="Мастер")
-- `photo`: ImageField (upload_to="reviews/", blank=True, null=True, verbose_name="Фотография")
-- `created_at`: DateTimeField (auto_now_add=True, verbose_name="Дата создания")
-- `rating`: PositiveSmallIntegerField (с валидаторами MinValueValidator(1) и MaxValueValidator(5), verbose_name="Оценка") (Или через CHOICES)
-- `is_published`: BooleanField (default=True, verbose_name="Опубликован")
+Модель для хранения отзывов клиентов о мастерах.
+
+Поля:
+- `text`: TextField (verbose_name="Текст отзыва") - Содержание отзыва.
+- `client_name`: CharField (max_length=100, blank=True, null=True, verbose_name="Имя клиента") - Имя клиента, оставившего отзыв. Может быть пустым.
+- `master`: ForeignKey (Master, on_delete=models.SET_NULL, null=True, verbose_name="Мастер") - Ссылка на мастера, которому оставлен отзыв. Если мастер удален, поле становится NULL.
+- `photo`: ImageField (upload_to="reviews/", blank=True, null=True, verbose_name="Фотография") - Фотография, прикрепленная к отзыву. Может быть пустой.
+- `created_at`: DateTimeField (auto_now_add=True, verbose_name="Дата создания") - Дата и время создания отзыва. Устанавливается автоматически при создании.
+- `rating`: PositiveSmallIntegerField (verbose_name="Оценка", choices=RATING_CHOICES, default=5) - Оценка отзыва по шкале от 1 до 5.
+- `is_published`: BooleanField (default=False, verbose_name="Опубликован") - Флаг, указывающий, опубликован ли отзыв.
+
+RATING_CHOICES:
+- 1: "Ужасно"
+- 2: "Плохо"
+- 3: "Нормально"
+- 4: "Хорошо"
+- 5: "Отлично"
 """
 
 
 class Review(models.Model):
+
+    RATING_CHOICES = [
+        (1, "Ужасно"),
+        (2, "Плохо"),
+        (3, "Нормально"),
+        (4, "Хорошо"),
+        (5, "Отлично"),
+    ]
+
     text = models.TextField(verbose_name="Текст отзыва")
     client_name = models.CharField(
         max_length=100, blank=True, null=True, verbose_name="Имя клиента"
@@ -62,6 +81,5 @@ class Review(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     rating = models.PositiveSmallIntegerField(
-        verbose_name="Оценка", min_value=1, max_value=5
-    )
+        verbose_name="Оценка", choices=RATING_CHOICES, default=5)
     is_published = models.BooleanField(default=False, verbose_name="Опубликован")

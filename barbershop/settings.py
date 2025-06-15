@@ -118,3 +118,12 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# URL - это путь на сайте
+# Например barbershop.ru/media/...
+# Например в модели Review поле photo = models.- это означает что изображение будет доступно по адресу barbershop.ru/media/...
+MEDIA_URL = "/media/" 
+
+# Лежать будут в папке media на сервере
+# ImageField(upload_to="reviews/") - это означает что изображение будет лежать в папке media/reviews/...
+MEDIA_ROOT = BASE_DIR / "media"
