@@ -74,3 +74,6 @@ class Service(models.Model):
         verbose_name="Длительность", help_text="Время выполнения в минутах", default=20
     )
     is_popular = models.BooleanField(default=False, verbose_name="Популярная услуга")
+
+    def __str__(self):
+        return self.name
