@@ -51,8 +51,8 @@ class Order(models.Model):
         default="new",
         verbose_name="Статус",
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", default=None)
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления", default=None)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления", null=True, blank=True)
 
 
 
