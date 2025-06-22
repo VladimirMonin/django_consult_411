@@ -240,7 +240,38 @@ masters_with_total_duration = Master.objects.annotate(
 for master in masters_with_total_duration:
     print(f"Мастер: {master.last_name}, Общее время заказов: {master.total_order_duration} мин.")
 ```
-#TODO - для запроса 8 написать вторую вариацию с фильтром по дате - чтобы мы за конкретный месяц ц могли посмотреть
+
+### **8.1 Общая длительность всех заказов мастера за конкретный месяц**
+
+**Описание**:
+Вариация предыдущего запроса с фильтрацией по дате. Вычисляет общее время (`total_order_duration_month`), которое мастер затратил на заказы за конкретный месяц. Используется `Sum` с фильтром по полю `created_at`.
+
+**Запрос**:
+```python
+from django.db.models import Sum, Q
+from datetime import datetime
+
+# Выбираем год и месяц для фильтрации
+year = 2023
+month = 5  # Май
+
+masters_with_monthly_duration = Master.objects.annotate(
+    total_order_duration_month=Sum(
+        'orders__services__duration',
+        filter=Q(orders__created_at__year=year, orders__created_at__month=month)
+    )
+).order_by('-total_order_duration_month')
+
+# Использование
+for master in masters_with_monthly_duration:
+    print(f"Мастер: {master.last_name}, Время заказов за {month}/{year}: {master.total_order_duration_month or 0} мин.")
+```
+
+**Примечания**:
+- Если у мастера не было заказов в указанный месяц, значение будет `None`, поэтому используем `or 0` при выводе
+- Можно динамически задавать год и месяц через переменные
+- Фильтр по дате применяется только к агрегируемым данным, не затрагивая основную выборку мастеров
+
 ---
 
 ### **9. Количество уникальных клиентов у мастера**

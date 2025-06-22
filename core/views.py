@@ -7,10 +7,6 @@ from .data import *
 from django.db.models import Q
 from .models import Order
 
-# импорт функции reverse для создания URL-адресов
-# TODO - Доделать модель, доделать SQL запрос наполнить базу и скинуть запрос
-# TODO Потом доделать конспект
-
 
 def landing(request):
     """Главная страница сайта - лендинг"""
