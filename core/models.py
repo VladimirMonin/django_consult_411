@@ -25,6 +25,15 @@ class Master(models.Model):
 
 
 class Order(models.Model):
+    
+    STATUS_CHOICES = [
+        ("new", "Новая"),
+        ("confirmed", "Подтверждена"),
+        ("completed", "Выполнена"),
+        ("cancelled", "Отменена"),
+    ]
+    
+    
     name = models.CharField(max_length=100, verbose_name="Имя")
     phone = models.CharField(max_length=20, verbose_name="Телефон")
     comment = models.TextField(verbose_name="Комментарий", null=True, blank=True)
@@ -36,6 +45,14 @@ class Order(models.Model):
         related_name="orders",
     )
     services = models.ManyToManyField("Service", verbose_name="Услуги", related_name="orders")
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="new",
+        verbose_name="Статус",
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", default=None)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления", default=None)
 
 
 
