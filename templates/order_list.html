@@ -13,62 +13,65 @@
     <h1>{{title}}</h1>
 </div>
 <div class="row">
-<form>
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" id="searchForm" aria-describedby="searchForm" placeholder="Введите поисковый запрос" name=q>
-        <button type="submit" class="btn btn-primary"><span><i class="bi bi-search"></i></span></button>
-    </div>
-    {% comment %} Тут чекбоксы условий фильтрации {% endcomment %}
-    <div class="mb-3">
-    <label class="form-label">Искать по:</label>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="searchByPhone" name="search_by_phone" value="true" checked>
-        <label class="form-check-label" for="searchByPhone">Телефону</label>
-    </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="searchByName" name="search_by_name" value="true">
-        <label class="form-check-label" for="searchByName">Имени</label>
-    </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="searchByComment" name="search_by_comment" value="true">
-        <label class="form-check-label" for="searchByComment">Комментарию</label>
-    </div>
-    {% comment %} Тут радиокнопки направления сортировки {% endcomment %}
-    <div class="mb-3">
-    <label class="form-label">Сортировать по дате:</label>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="order_by_date" id="orderByDesc" value="desc" checked>
-        <label class="form-check-label" for="orderByDesc">По убыванию</label>
-    </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="order_by_date" id="orderByAsc" value="asc">
-        <label class="form-check-label" for="orderByAsc">По возрастанию</label>
-    </div>
-</div>
-{% comment %} Чекбоксы статусов заявок {% endcomment %}
-<div class="mb-3">
-    <label class="form-label">Статус заявки:</label>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="statusNew" name="status_new" value="true" checked>
-        <label class="form-check-label" for="statusNew">Новая</label>
-    </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="statusConfirmed" name="status_confirmed" value="true" checked>
-        <label class="form-check-label" for="statusConfirmed">Подтвержденная</label>
-    </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="statusCompleted" name="status_completed" value="true">
-        <label class="form-check-label" for="statusCompleted">Выполненная</label>
-    </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="statusCancelled" name="status_cancelled" value="true">
-        <label class="form-check-label" for="statusCancelled">Отмененная</label>
-    </div>
+    <form method="GET" action=".">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="searchForm" aria-describedby="searchForm" placeholder="Введите поисковый запрос" name="q" value="{{ request.GET.q|default:'' }}">
+            <button type="submit" class="btn btn-primary"><span><i class="bi bi-search"></i></span></button>
+        </div>
+
+        {% comment %} Тут чекбоксы условий фильтрации {% endcomment %}
+        <div class="mb-3">
+            <label class="form-label">Искать по:</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="searchByPhone" name="search_by_phone" value="true" {% if request.GET.search_by_phone %}checked{% endif %}>
+                <label class="form-check-label" for="searchByPhone">Телефону</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="searchByName" name="search_by_name" value="true" {% if request.GET.search_by_name %}checked{% endif %}>
+                <label class="form-check-label" for="searchByName">Имени</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="searchByComment" name="search_by_comment" value="true" {% if request.GET.search_by_comment %}checked{% endif %}>
+                <label class="form-check-label" for="searchByComment">Комментарию</label>
+            </div>
+        </div>
+
+        {% comment %} Тут радиокнопки направления сортировки {% endcomment %}
+        <div class="mb-3">
+            <label class="form-label">Сортировать по дате:</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="order_by_date" id="orderByDesc" value="desc" {% if request.GET.order_by_date == 'desc' or not request.GET.order_by_date %}checked{% endif %}>
+                <label class="form-check-label" for="orderByDesc">По убыванию</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="order_by_date" id="orderByAsc" value="asc" {% if request.GET.order_by_date == 'asc' %}checked{% endif %}>
+                <label class="form-check-label" for="orderByAsc">По возрастанию</label>
+            </div>
+        </div>
+
+        {% comment %} Чекбоксы статусов заявок {% endcomment %}
+        <div class="mb-3">
+            <label class="form-label">Статус заявки:</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="statusNew" name="status_new" value="true" {% if request.GET.status_new %}checked{% endif %}>
+                <label class="form-check-label" for="statusNew">Новая</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="statusConfirmed" name="status_confirmed" value="true" {% if request.GET.status_confirmed %}checked{% endif %}>
+                <label class="form-check-label" for="statusConfirmed">Подтвержденная</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="statusCompleted" name="status_completed" value="true" {% if request.GET.status_completed %}checked{% endif %}>
+                <label class="form-check-label" for="statusCompleted">Выполненная</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="statusCancelled" name="status_cancelled" value="true" {% if request.GET.status_cancelled %}checked{% endif %}>
+                <label class="form-check-label" for="statusCancelled">Отмененная</label>
+            </div>
+        </div>
+    </form>
 </div>
 
-    
-</form>
-</div>
 <div class="row g-3">
 {% for order in orders %}    <div class="col-12 col-md-6 col-lg-4">  
         <div class="master-card">
