@@ -43,6 +43,8 @@ class Order(models.Model):
         default=None,
         on_delete=models.SET_DEFAULT,
         related_name="orders",
+        blank=True,
+        null=True,
     )
     services = models.ManyToManyField("Service", verbose_name="Услуги", related_name="orders")
     status = models.CharField(
@@ -50,6 +52,8 @@ class Order(models.Model):
         choices=STATUS_CHOICES,
         default="new",
         verbose_name="Статус",
+        blank=True,
+        null=True,
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления", null=True, blank=True)

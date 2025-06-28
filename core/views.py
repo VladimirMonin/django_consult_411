@@ -7,6 +7,8 @@ from .data import *
 from django.db.models import Q
 from .models import Order
 
+from django.shortcuts import redirect
+
 
 def landing(request):
     """Главная страница сайта - лендинг"""
@@ -121,4 +123,25 @@ def thanks(request):
 
 
 def order_create(request):
-    return render(request, "order_form.html")
+    if request.method == "GET":
+        return render(request, "order_form.html")
+    
+    elif request.method == "POST":
+        # Получаем данные из формы
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
+        comment = request.POST.get("comment")
+
+        # Проверка что есть имя и телефон
+        if not name or not phone:
+            return HttpResponse("Не заполнены обязательные поля", status=400)
+        
+        # Создаем объект заявки
+        order = Order.objects.create(
+            name=name,
+            phone=phone,
+            comment=comment,
+        )
+        
+        # Редирект на страницу благодарности
+        return redirect("thanks")

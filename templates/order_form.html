@@ -6,7 +6,13 @@
             <div class="card mt-5">
                 <div class="card-body text-center">
                     <h1 class="card-title">Запись на приём</h1>
-                    <p class="card-text">Тут будет форма заявки</p>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="name" placeholder="Имя" class="form-control mb-3 mt-3" required>
+                        <input type="tel" name="phone" placeholder="Телефон" class="form-control mb-3" required>
+                        <textarea name="comment" placeholder="Комментарий" class="form-control mb-3" rows="10"></textarea>
+                        <button type="submit" class="btn btn-dark">Записаться</button>
+                    </form>
                 </div>
             </div>
         </div>
