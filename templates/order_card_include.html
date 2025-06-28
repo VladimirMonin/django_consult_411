@@ -26,7 +26,7 @@
             </p>
             <p><i class="bi bi-calendar3 text-success"></i> Дата: {{ order.created_at|date:"d.m.Y" }}</p>
             {% comment %} Кнопка редактирования {% endcomment %}
-            <a href="{% url 'order_update' order.id %}"><i class="bi bi-pencil text-danger"></i>
+            <a href="{% url 'order_update' order.id %}" class="btn btn-outline-danger"><i class="bi bi-pencil"></i>
         </a>
         </div>
     </div> 
