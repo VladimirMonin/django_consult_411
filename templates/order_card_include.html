@@ -1,0 +1,32 @@
+        <div class="master-card">
+            <h5><i class="bi bi-clipboard2-check text-primary"></i> Заявка №{{ order.id }}</h5>
+            <p><i class="bi bi-person-circle text-info"></i> Имя клиента: {{ order.name }}</p>
+            {% comment %} Цикл для отрисовки услуг. BS5 бейджи {% endcomment %}
+            <p><i class="bi bi-scissors text-warning"> {{ order.services.all|length }}</i> Услуги:
+            {% for service in order.services.all %}
+                <span class="badge bg-secondary">{{ service }}</span>
+            {% empty %}
+                <span class="badge bg-secondary">Нет услуг</span>
+            {% endfor %}
+            </p> 
+            <p>
+            <i class="bi bi-flag text-dark"></i> Статус заявки: 
+            <!-- Статус заявки -->
+            {% if order.status == 'new' %}
+                <span class="badge bg-primary"><i class="bi bi-plus-circle"></i> Новая</span>
+            {% elif order.status == 'confirmed' %}
+                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Подтвержденная</span>
+            {% elif order.status == 'cancelled' %}
+                <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Отмененная</span>
+            {% elif order.status == 'completed' %}
+                <span class="badge bg-info"><i class="bi bi-check2-all"></i> Выполненная</span>
+            {% else %}
+                <span class="badge bg-secondary"><i class="bi bi-question-circle"></i> Неизвестный статус</span>
+            {% endif %} 
+            </p>
+            <p><i class="bi bi-calendar3 text-success"></i> Дата: {{ order.created_at|date:"d.m.Y" }}</p>
+            {% comment %} Кнопка редактирования {% endcomment %}
+            <a href="{% url 'order_update' order.id %}"><i class="bi bi-pencil text-danger"></i>
+        </a>
+        </div>
+    </div> 

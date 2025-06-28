@@ -74,42 +74,7 @@
 
 <div class="row g-3">
 {% for order in orders %}    <div class="col-12 col-md-6 col-lg-4">  
-        <div class="master-card">
-            <h5><i class="bi bi-clipboard2-check text-primary"></i> Заявка №{{ order.id }}</h5>
-            <p><i class="bi bi-person-circle text-info"></i> Имя клиента: {{ order.client_name }}</p>
-            {% comment %} Цикл для отрисовки услуг. BS5 бейджи {% endcomment %}
-            <p><i class="bi bi-scissors text-warning"> {{ order.services|length }}</i> Услуги:
-            {% for service in order.services %}
-                <span class="badge bg-secondary">{{ service }}</span>
-            {% empty %}
-                <span class="badge bg-secondary">Нет услуг</span>
-            {% endfor %}
-            </p> 
-            <p>
-            <i class="bi bi-flag text-dark"></i> Статус заявки: 
-            {% comment %} 
-            Ветвление для статуса заявки всего их  
-            STATUS_NEW = 'новая'
-            STATUS_CONFIRMED = 'подтвержденная'
-            STATUS_CANCELLED = 'отмененная'
-            STATUS_COMPLETED = 'выполненная'
-            {% endcomment %}
-            <!-- Статус заявки -->
-            {% if order.status == 'новая' %}
-                <span class="badge bg-primary"><i class="bi bi-plus-circle"></i> Новая</span>
-            {% elif order.status == 'подтвержденная' %}
-                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Подтвержденная</span>
-            {% elif order.status == 'отмененная' %}
-                <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Отмененная</span>
-            {% elif order.status == 'выполненная' %}
-                <span class="badge bg-info"><i class="bi bi-check2-all"></i> Выполненная</span>
-            {% else %}
-                <span class="badge bg-secondary"><i class="bi bi-question-circle"></i> Неизвестный статус</span>
-            {% endif %} 
-            </p>
-            <p><i class="bi bi-calendar3 text-success"></i> Дата: {{ order.date }}</p>
-        </div>
-    </div> 
+        {% include "order_card_include.html" %}
 {% endfor %}
 </div>
 </div>

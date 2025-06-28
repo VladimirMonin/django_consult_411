@@ -63,22 +63,22 @@ def order_list(request):
 
     # Ветвление по радиокнопкам направления сортировки по дате
     if order_by_date == "asc":
-        query = query.order_by("date")
+        query = query.order_by("created_at")
     else:
-        query = query.order_by("-date")
+        query = query.order_by("-created_at")
 
     # Ветвление по чекбоксам статуса заявок
     if status_new:
-        base_q &= Q(status="new")
+        base_q |= Q(status="new")
 
     if status_confirmed:
-        base_q &= Q(status="confirmed")
+        base_q |= Q(status="confirmed")
 
     if status_completed:
-        base_q &= Q(status="completed")
+        base_q |= Q(status="completed")
 
     if status_cancelled:
-        base_q &= Q(status="cancelled")
+        base_q |= Q(status="cancelled")
 
     # Объединяем базовый запрос и базовую Q
     query = query.filter(base_q)
