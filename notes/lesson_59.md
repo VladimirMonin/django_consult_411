@@ -90,3 +90,72 @@ def order_create(request):
         # Редирект на страницу благодарности
         return redirect("thanks")
 ```
+
+## Вариант формы для обновления Order
+
+```python
+def order_update(request, order_id):
+    if request.method == "GET":
+        # Получаем объект заявки
+        try:
+            order = Order.objects.get(id=order_id)
+        except ObjectDoesNotExist:
+            return HttpResponse("Заявка не найдена", status=404)
+        
+        context = {
+            "title": "Редактирование заявки",
+            "button_text": "Сохранить",
+            "order": order,
+        }
+        return render(request, "order_form.html", context)
+    
+    elif request.method == "POST":
+        # Получаем данные из формы
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
+        comment = request.POST.get("comment")
+
+        # Проверка что есть имя и телефон
+        if not name or not phone:
+            return HttpResponse("Не заполнены обязательные поля", status=400)
+        
+        # Обновляем объект заявки
+        order = Order.objects.filter(id=order_id).update(
+            name=name,
+            phone=phone,
+            comment=comment,
+        )
+        # Редирект на страницу благодарности
+        return redirect("thanks")
+```
+
+HTML мы можем просто вязть и использовать универсальный шаблон
+тут мы модифицировали шаблон для создания заявки добавив переменные
+- заголовок
+- текст кнопки
+- Подстановка данных в поля ввода
+```html
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mt-5">
+                <div class="card-body text-center">
+                    <h1 class="card-title">
+                        {{ title }}
+                    </h1>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="name" placeholder="Имя" class="form-control mb-3 mt-3" value="{{ order.name }}" required>
+                        <input type="tel" name="phone" placeholder="Телефон" class="form-control mb-3" value="{{ order.phone }}" required>
+                        <textarea name="comment" placeholder="Комментарий" class="form-control mb-3" rows="10">{{ order.comment }}</textarea>
+                        <button type="submit" class="btn btn-dark">{{ button_text }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+```

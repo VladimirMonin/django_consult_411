@@ -34,7 +34,7 @@ class Order(models.Model):
     ]
     
     
-    name = models.CharField(max_length=100, verbose_name="Имя")
+    name  = models.CharField(max_length=100, verbose_name="Имя")
     phone = models.CharField(max_length=20, verbose_name="Телефон")
     comment = models.TextField(verbose_name="Комментарий", null=True, blank=True)
     master = models.ForeignKey(

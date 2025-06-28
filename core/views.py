@@ -8,6 +8,7 @@ from django.db.models import Q
 from .models import Order
 
 from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def landing(request):
@@ -124,7 +125,11 @@ def thanks(request):
 
 def order_create(request):
     if request.method == "GET":
-        return render(request, "order_form.html")
+        context = {
+            "title": "Заявка на стрижку",
+            "button_text": "Записаться",
+        }
+        return render(request, "order_form.html", context)
     
     elif request.method == "POST":
         # Получаем данные из формы
@@ -143,5 +148,40 @@ def order_create(request):
             comment=comment,
         )
         
+        # Редирект на страницу благодарности
+        return redirect("thanks")
+
+
+def order_update(request, order_id):
+    if request.method == "GET":
+        # Получаем объект заявки
+        try:
+            order = Order.objects.get(id=order_id)
+        except ObjectDoesNotExist:
+            return HttpResponse("Заявка не найдена", status=404)
+        
+        context = {
+            "title": "Редактирование заявки",
+            "button_text": "Сохранить",
+            "order": order,
+        }
+        return render(request, "order_form.html", context)
+    
+    elif request.method == "POST":
+        # Получаем данные из формы
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
+        comment = request.POST.get("comment")
+
+        # Проверка что есть имя и телефон
+        if not name or not phone:
+            return HttpResponse("Не заполнены обязательные поля", status=400)
+        
+        # Обновляем объект заявки
+        order = Order.objects.filter(id=order_id).update(
+            name=name,
+            phone=phone,
+            comment=comment,
+        )
         # Редирект на страницу благодарности
         return redirect("thanks")
