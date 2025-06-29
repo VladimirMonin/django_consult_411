@@ -134,7 +134,7 @@ def order_create(request):
             "form": form,
         }
         return render(request, "order_form_class.html", context)
-    
+
     elif request.method == "POST":
         # Валидация формы
         form = OrderForm(request.POST)
@@ -147,7 +147,7 @@ def order_create(request):
                 "form": form,
             }
             return render(request, "order_form_class.html", context)
-        
+
         # Создаем объект заявки
         order = Order.objects.create(
             name=form.cleaned_data["name"],
@@ -158,7 +158,7 @@ def order_create(request):
 
         # Множественно установим связи M2M для услуг
         order.services.set(form.cleaned_data["services"])
-        
+
         # Редирект на страницу благодарности
         return redirect("thanks")
 
@@ -170,29 +170,48 @@ def order_update(request, order_id):
             order = Order.objects.get(id=order_id)
         except ObjectDoesNotExist:
             return HttpResponse("Заявка не найдена", status=404)
-        
+
+        # Создаем форму и передаем в нее данные из объекта заявки
+        form = OrderForm(
+            initial={
+                "name": order.name,
+                "phone": order.phone,
+                "comment": order.comment,
+                "master": order.master,
+                "services": order.services.all(),
+            }
+        )
+
         context = {
             "title": "Редактирование заявки",
             "button_text": "Сохранить",
             "order": order,
+            "form": form,
         }
-        return render(request, "order_form.html", context)
-    
-    elif request.method == "POST":
-        # Получаем данные из формы
-        name = request.POST.get("name")
-        phone = request.POST.get("phone")
-        comment = request.POST.get("comment")
+        return render(request, "order_form_class.html", context)
 
-        # Проверка что есть имя и телефон
-        if not name or not phone:
-            return HttpResponse("Не заполнены обязательные поля", status=400)
-        
-        # Обновляем объект заявки
-        order = Order.objects.filter(id=order_id).update(
-            name=name,
-            phone=phone,
-            comment=comment,
-        )
+    elif request.method == "POST":
+        # Валидация формы
+        form = OrderForm(request.POST)
+
+        # Если форма НЕ валидна, то возвращаем форму с ошибками
+        if not form.is_valid():
+            context = {
+                "title": "Редактирование заявки",
+                "button_text": "Сохранить",
+                "form": form,
+            }
+
+            return render(request, "order_form_class.html", context)
+
+        # Обновляем данные объекта заявки
+        order = Order.objects.get(id=order_id)
+        order.name = form.cleaned_data["name"]
+        order.phone = form.cleaned_data["phone"]
+        order.comment = form.cleaned_data["comment"]
+        order.master = form.cleaned_data["master"]
+        order.services.set(form.cleaned_data["services"])
+        order.save()
+
         # Редирект на страницу благодарности
         return redirect("thanks")
