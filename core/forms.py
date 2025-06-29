@@ -2,22 +2,59 @@
 from django import forms
 from .models import Order, Service, Review, Master
 from django.core.exceptions import ValidationError
+import re
 
 
 # Форма не связанная с моделью
 class OrderForm(forms.Form):
-    name = forms.CharField(label="",max_length=100, required=True, widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Ваше имя"}))
-    phone = forms.CharField(label="",max_length=20, required=True, widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Ваш телефон"}))
-    comment = forms.CharField(label="",required=False, widget=forms.Textarea(attrs={"class": "form-control", "placeholder": "Комментарий"}))
+    name = forms.CharField(
+        label="",
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Ваше имя"}
+        ),
+    )
+    phone = forms.CharField(
+        label="",
+        max_length=20,
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Телефон: +79991234567 или 89991234567",
+                "pattern": r"^(\+7|8)\d{10}$",
+
+            }
+        ),
+    )
+    comment = forms.CharField(
+        label="",
+        required=False,
+        widget=forms.Textarea(
+            attrs={"class": "form-control", "placeholder": "Комментарий"}
+        ),
+    )
     master = forms.ModelChoiceField(
-        label="Мастер", 
-        queryset=Master.objects.all(), 
+        label="Мастер",
+        queryset=Master.objects.all(),
         required=False,
         widget=forms.Select(attrs={"class": "form-control"}),
-        initial = Master.objects.get(first_name__contains="Алевтина")
+        initial=Master.objects.get(first_name__contains="Алевтина"),
     )
     services = forms.ModelMultipleChoiceField(
         label="Услуги",
         queryset=Service.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-control"})
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
     )
+
+    def clean_phone(self):
+        data = self.cleaned_data["phone"]
+        pattern = r"^(\+7|8)\d{10}$"
+
+        if not re.match(pattern, data):
+            raise ValidationError(
+                "Номер телефона должен быть в формате 89123433333 или +79123433333"
+            )
+
+        return data
