@@ -48,6 +48,14 @@ class OrderForm(forms.Form):
         widget=forms.SelectMultiple(attrs={"class": "form-control"}),
     )
 
+    def clean(self):
+        cleaned_data = super().clean()
+        phone = cleaned_data.get("phone", '')
+        name = cleaned_data.get("name", '')
+
+        if len(phone) + len(name) < 14:
+            raise ValidationError("Имя + телефон должны быть не менее 14 символов")
+
     def clean_phone(self):
         data = self.cleaned_data["phone"]
         pattern = r"^(\+7|8)\d{10}$"
