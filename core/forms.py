@@ -66,3 +66,16 @@ class OrderForm(forms.Form):
             )
 
         return data
+
+# Форма связанная с моделью
+class ReviewModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Review
+        fields = ["client_name", "text", "master", "photo", "rating"]
+        widgets = {
+            "client_name": forms.TextInput(attrs={"class": "form-control"}),
+            "text": forms.Textarea(attrs={"class": "form-control"}),
+            "master": forms.Select(attrs={"class": "form-control"}),
+            "rating": forms.Select(attrs={"class": "form-control"}),
+        }

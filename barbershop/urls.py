@@ -8,7 +8,8 @@ from core.views import (
     order_list,
     thanks,
     order_create,
-    order_update
+    order_update,
+    review_create
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -24,4 +25,5 @@ urlpatterns = [
     path("orders/update/<int:order_id>/", order_update, name="order_update"),
     path("orders/", order_list, name="order_list"),
     path("thanks/", thanks, name="thanks"),
+    path("reviews/create/", review_create, name="review_create"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

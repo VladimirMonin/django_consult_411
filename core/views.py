@@ -9,7 +9,7 @@ from .models import Order
 
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import OrderForm
+from .forms import OrderForm, ReviewModelForm
 
 
 def landing(request):
@@ -122,6 +122,29 @@ def master_list(request):
 
 def thanks(request):
     return render(request, "thanks.html")
+
+def review_create(request):
+    if request.method == "GET":
+        form = ReviewModelForm()
+        context = {
+            "title": "Оставить отзыв",
+            "button_text": "Отправить отзыв",
+            "form": form,
+        }
+        return render(request, "review_form.html", context)
+
+    elif request.method == "POST":
+        form = ReviewModelForm(request.POST, request.FILES)
+        if not form.is_valid():
+            context = {
+                "title": "Оставить отзыв",
+                "button_text": "Отправить отзыв",
+                "form": form,
+            }
+            return render(request, "review_form.html", context)
+
+        form.save()
+        return redirect("thanks")
 
 
 def order_create(request):
