@@ -8,11 +8,9 @@
 
 ## Таблица типов полей и их валидаторов
 
-- Сделать большую таблицу с типами полей и валидаторами
-
-
--
-
+- Сделать большую таблицу с типами полей и валидаторами которые у них есть (чтобы было описание)
+- Расскажи про Widjets - какие они бываают
+- Какие еще свойства у полей есть? label, queryset, required, widget, initial и...
 
 ```python
 # ./core/forms.py
@@ -65,6 +63,7 @@ class OrderForm(forms.Form):
 </div>
 {% endblock content %}
 ```
+
 Как видите у нас все стало проще в шаблоне. Просто рендерим форму через `{{ form.as_p }}`
 
 - Изменение View Для создания и обновления записи
@@ -169,7 +168,6 @@ def order_update(request, order_id):
 - Что такое `cleaned_data`?
 - Когда и как формируются данные в `cleaned_data`?
 
-
 ## Методы `clean()` и `clean_<field_name>()`
 
 ```python
@@ -248,3 +246,30 @@ class OrderForm(forms.Form):
 - Когда отрабатывают эти методы?
 - Какие вещи можно делать в `clean()`?
 
+## ModelForm
+
+- Что такое `ModelForm`?
+- Чем она отличается от обычных форм?
+- Как создать `ModelForm`?
+
+```python
+# Форма связанная с моделью
+class ReviewModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Review
+        fields = ["client_name", "text", "master", "photo", "rating"]
+        widgets = {
+            "client_name": forms.TextInput(attrs={"class": "form-control"}),
+            "text": forms.Textarea(attrs={"class": "form-control"}),
+            "master": forms.Select(attrs={"class": "form-control"}),
+            "rating": forms.Select(attrs={"class": "form-control"}),
+        }
+```
+
+- Поясненя как работает эта форма
+- Что класс `Meta` есть только у `ModelForm`
+- Что в него можно вписать
+- Что все валидаторы берутся из полей модели
+- Что все связанные данные берутся из полей модели
+- Что такое `fields`?
