@@ -9,6 +9,7 @@ from .models import Order
 
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
+from .forms import OrderForm
 
 
 def landing(request):
@@ -125,28 +126,38 @@ def thanks(request):
 
 def order_create(request):
     if request.method == "GET":
+        form = OrderForm()
+        # Контекст для передачи в шаблон
         context = {
             "title": "Заявка на стрижку",
             "button_text": "Записаться",
+            "form": form,
         }
-        return render(request, "order_form.html", context)
+        return render(request, "order_form_class.html", context)
     
     elif request.method == "POST":
-        # Получаем данные из формы
-        name = request.POST.get("name")
-        phone = request.POST.get("phone")
-        comment = request.POST.get("comment")
+        # Валидация формы
+        form = OrderForm(request.POST)
 
-        # Проверка что есть имя и телефон
-        if not name or not phone:
-            return HttpResponse("Не заполнены обязательные поля", status=400)
+        # Если форма НЕ валидна, то возвращаем форму с ошибками
+        if not form.is_valid():
+            context = {
+                "title": "Заявка на стрижку",
+                "button_text": "Записаться",
+                "form": form,
+            }
+            return render(request, "order_form_class.html", context)
         
         # Создаем объект заявки
         order = Order.objects.create(
-            name=name,
-            phone=phone,
-            comment=comment,
+            name=form.cleaned_data["name"],
+            phone=form.cleaned_data["phone"],
+            comment=form.cleaned_data["comment"],
+            master=form.cleaned_data["master"],
         )
+
+        # Множественно установим связи M2M для услуг
+        order.services.set(form.cleaned_data["services"])
         
         # Редирект на страницу благодарности
         return redirect("thanks")
