@@ -177,6 +177,7 @@ def order_create(request):
             phone=form.cleaned_data["phone"],
             comment=form.cleaned_data["comment"],
             master=form.cleaned_data["master"],
+            order_date=form.cleaned_data["date_time"],
         )
 
         # Множественно установим связи M2M для услуг
@@ -222,6 +223,7 @@ def order_update(request, order_id):
                 "comment": order.comment,
                 "master": order.master,
                 "services": order.services.all(),
+                "date_time": order.order_date,
             }
         )
 
@@ -253,6 +255,7 @@ def order_update(request, order_id):
         order.phone = form.cleaned_data["phone"]
         order.comment = form.cleaned_data["comment"]
         order.master = form.cleaned_data["master"]
+        order.order_date = form.cleaned_data["date_time"]
         order.services.set(form.cleaned_data["services"])
         order.save()
 

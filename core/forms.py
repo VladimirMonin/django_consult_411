@@ -24,7 +24,6 @@ class OrderForm(forms.Form):
                 "class": "form-control",
                 "placeholder": "Телефон: +79991234567 или 89991234567",
                 "pattern": r"^(\+7|8)\d{10}$",
-
             }
         ),
     )
@@ -42,6 +41,16 @@ class OrderForm(forms.Form):
         widget=forms.Select(attrs={"class": "form-control"}),
         initial=Master.objects.get(first_name__contains="Алевтина"),
     )
+
+    # Split для дата-время
+    date_time = forms.SplitDateTimeField(
+        label="Дата и время",
+        required=True,
+        widget=forms.SplitDateTimeWidget(
+            date_attrs={"class": "form-control", "type": "date"},
+            time_attrs={"class": "form-control", "type": "time"},
+        ),
+    )
     services = forms.ModelMultipleChoiceField(
         label="Услуги",
         queryset=Service.objects.all(),
@@ -50,8 +59,8 @@ class OrderForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        phone = cleaned_data.get("phone", '')
-        name = cleaned_data.get("name", '')
+        phone = cleaned_data.get("phone", "")
+        name = cleaned_data.get("name", "")
 
         if len(phone) + len(name) < 14:
             raise ValidationError("Имя + телефон должны быть не менее 14 символов")
@@ -68,15 +77,18 @@ class OrderForm(forms.Form):
         return data
 
     def clean_services(self):
-        master = self.cleaned_data.get('master')
-        services = self.cleaned_data.get('services')
+        master = self.cleaned_data.get("master")
+        services = self.cleaned_data.get("services")
 
         if master and services:
             master_services = master.services.all()
             for service in services:
                 if service not in master_services:
-                    raise ValidationError(f'Мастер {master} не предоставляет услугу "{service}".')
+                    raise ValidationError(
+                        f'Мастер {master} не предоставляет услугу "{service}".'
+                    )
         return services
+
 
 # Форма связанная с моделью
 class ReviewModelForm(forms.ModelForm):
