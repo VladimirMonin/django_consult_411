@@ -67,6 +67,17 @@ class OrderForm(forms.Form):
 
         return data
 
+    def clean_services(self):
+        master = self.cleaned_data.get('master')
+        services = self.cleaned_data.get('services')
+
+        if master and services:
+            master_services = master.services.all()
+            for service in services:
+                if service not in master_services:
+                    raise ValidationError(f'Мастер {master} не предоставляет услугу "{service}".')
+        return services
+
 # Форма связанная с моделью
 class ReviewModelForm(forms.ModelForm):
 
