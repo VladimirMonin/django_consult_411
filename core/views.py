@@ -188,16 +188,22 @@ def order_create(request):
 
 from django.http import JsonResponse
 from .models import Master
+import json
 
 def get_master_services(request):
-    master_id = request.GET.get('master_id')
-    try:
-        master = Master.objects.get(id=master_id)
-        services = master.services.all()
-        services_data = [{'id': service.id, 'name': service.name} for service in services]
-        return JsonResponse({'services': services_data})
-    except Master.DoesNotExist:
-        return JsonResponse({'error': 'Master not found'}, status=404)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            master_id = data.get('master_id')
+            master = Master.objects.get(id=master_id)
+            services = master.services.all()
+            services_data = [{'id': service.id, 'name': service.name} for service in services]
+            return JsonResponse({'services': services_data})
+        except Master.DoesNotExist:
+            return JsonResponse({'error': 'Master not found'}, status=404)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
 def order_update(request, order_id):
