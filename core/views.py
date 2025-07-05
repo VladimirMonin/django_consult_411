@@ -186,6 +186,20 @@ def order_create(request):
         return redirect("thanks")
 
 
+from django.http import JsonResponse
+from .models import Master
+
+def get_master_services(request):
+    master_id = request.GET.get('master_id')
+    try:
+        master = Master.objects.get(id=master_id)
+        services = master.services.all()
+        services_data = [{'id': service.id, 'name': service.name} for service in services]
+        return JsonResponse({'services': services_data})
+    except Master.DoesNotExist:
+        return JsonResponse({'error': 'Master not found'}, status=404)
+
+
 def order_update(request, order_id):
     if request.method == "GET":
         # Получаем объект заявки

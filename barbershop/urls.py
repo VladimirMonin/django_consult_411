@@ -9,7 +9,8 @@ from core.views import (
     thanks,
     order_create,
     order_update,
-    review_create
+    review_create,
+    get_master_services
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -17,6 +18,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("ajax/get-master-services/", get_master_services, name="get_master_services"),
     path("", landing, name="landing"),
     path("index/", index, name="index"),
     path("masters/", master_list, name="master_list"),
