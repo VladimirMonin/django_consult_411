@@ -46,7 +46,9 @@ class Order(models.Model):
         blank=True,
         null=True,
     )
-    services = models.ManyToManyField("Service", verbose_name="Услуги", related_name="orders")
+    services = models.ManyToManyField(
+        "Service", verbose_name="Услуги", related_name="orders"
+    )
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -55,9 +57,20 @@ class Order(models.Model):
         blank=True,
         null=True,
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", null=True, blank=True)
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления", null=True, blank=True)
 
+    order_date = models.DateTimeField(
+        verbose_name="Дата заказа", null=True, default=None
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="Дата создания", null=True, blank=True
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name="Дата обновления", null=True, blank=True
+    )
+
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
 
 
 class Review(models.Model):
@@ -86,6 +99,10 @@ class Review(models.Model):
     )
     is_published = models.BooleanField(default=False, verbose_name="Опубликован")
 
+    class Meta:
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
+
 
 class Service(models.Model):
     name = models.CharField(max_length=200, verbose_name="Название")
@@ -98,3 +115,7 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Услуга"
+        verbose_name_plural = "Услуги"
