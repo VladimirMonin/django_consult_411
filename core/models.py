@@ -84,7 +84,8 @@ class Review(models.Model):
     ]
 
     AI_CHOICES = [
-        ("ai_checked_true", "Проверено"),
+        ("ai_checked_true", "Проверено ИИ"),
+        ("ai_cancelled", "Отменено ИИ"),
         ("ai_checked_in_progress", "В процессе проверки"),
         ("ai_checked_false", "Не проверено"),
     ]
