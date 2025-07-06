@@ -20,6 +20,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -122,7 +123,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # URL - это путь на сайте
 # Например barbershop.ru/media/...
 # Например в модели Review поле photo = models.- это означает что изображение будет доступно по адресу barbershop.ru/media/...
-MEDIA_URL = "/media/" 
+MEDIA_URL = "/media/"
 
 # Лежать будут в папке media на сервере
 # ImageField(upload_to="reviews/") - это означает что изображение будет лежать в папке media/reviews/...
