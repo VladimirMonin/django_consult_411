@@ -48,3 +48,7 @@ footer {
   color: white;
   padding: 20px 0;
 }
+
+.toast-container {
+  z-index: 1055 !important; /* Важно, чтобы быть поверх других элементов */
+}

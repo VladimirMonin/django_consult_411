@@ -10,7 +10,7 @@ from .models import Order
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import OrderForm, ReviewModelForm
-
+from django.contrib import messages
 
 def landing(request):
     """Главная страница сайта - лендинг"""
@@ -141,9 +141,13 @@ def review_create(request):
                 "button_text": "Отправить отзыв",
                 "form": form,
             }
+            # Отправка сообщения об ошибке
+            messages.error(request, "Форма заполнена некорректно")
             return render(request, "review_form.html", context)
 
         form.save()
+        # Отправка сообщения об успешной отправке
+        messages.success(request, "Отзыв успешно отправлен")
         return redirect("thanks")
 
 
