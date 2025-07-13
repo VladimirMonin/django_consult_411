@@ -11,6 +11,7 @@ from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import OrderForm, ReviewModelForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 def landing(request):
     """Главная страница сайта - лендинг"""
@@ -23,6 +24,7 @@ def landing(request):
 
 
 # http://127.0.0.1:8000/orders/?q=cotiki&search_by_phone=true&search_by_name=true&search_by_comment=true&order_by_date=desc&status_new=true&status_confirmed=true&status_completed=true&status_cancelled=true
+@login_required
 def order_list(request):
 
     # Получаем параметры запроса

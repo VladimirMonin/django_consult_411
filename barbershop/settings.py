@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-
+from django.urls import reverse_lazy
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 
@@ -145,3 +145,8 @@ MISTRAL_MODERATIONS_GRADES = {
 
 TELEGRAM_BOT_API_KEY = os.getenv("TELEGRAM_BOT_API_KEY")
 TELEGRAM_USER_ID = os.getenv("TELEGRAM_USER_ID")
+
+
+
+# Маршруты для авторизации
+LOGIN_URL = reverse_lazy("login")
