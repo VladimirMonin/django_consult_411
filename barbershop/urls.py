@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from core.views import (
     index,
     landing,
@@ -14,6 +14,7 @@ from core.views import (
 )
 from django.conf import settings
 from django.conf.urls.static import static
+from users import urls as users_urls
 
 
 urlpatterns = [
@@ -28,4 +29,8 @@ urlpatterns = [
     path("orders/", order_list, name="order_list"),
     path("thanks/", thanks, name="thanks"),
     path("reviews/create/", review_create, name="review_create"),
+
+    # Пользователи
+    path("users/", include(users_urls)),
+    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
