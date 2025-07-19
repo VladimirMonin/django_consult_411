@@ -1,11 +1,12 @@
 from pickle import FLOAT
 from token import NAME, STRING
+from django.db.models.query import QuerySet
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from .data import *
 
 from django.db.models import Q
-from .models import Order
+from .models import Order, Master, Service
 
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,14 +14,20 @@ from .forms import OrderForm, ReviewModelForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-def landing(request):
-    """Главная страница сайта - лендинг"""
-    context = {
-        "title": "Барбершоп - стрижки и бритье",
-        "masters": masters[:3],  # Показываем только первые 3 мастера
-        "services": services,
-    }
-    return render(request, "landing.html", context)
+from django.views.generic import TemplateView, ListView, DetailView
+from django.views import View
+import json
+
+
+class LandingView(View):
+
+    def get(self, request):
+        context = {
+            "title": "Барбершоп - стрижки и бритье",
+            "masters": Master.objects.all()[:3],
+            "services": Service.objects.all(),
+        }
+        return render(request, "landing.html", context)
 
 
 # http://127.0.0.1:8000/orders/?q=cotiki&search_by_phone=true&search_by_name=true&search_by_comment=true&order_by_date=desc&status_new=true&status_confirmed=true&status_completed=true&status_cancelled=true
@@ -93,37 +100,103 @@ def order_list(request):
 
     return render(request, "order_list.html", context)
 
+class OrderListView(ListView):
+    model = Order
+    template_name = "order_list.html"
+    context_object_name = "orders"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Заявки на стрижки"
+        return context
 
-def index(request):
-    # Перенаправляем на лендинг
-    return landing(request)
+    def get_queryset(self):
+         # Получаем параметры запроса
+        q = self.request.GET.get("q")
+
+        # Чекбоксы поиска по телефону, имени и комментарию
+        search_by_phone = self.request.GET.get("search_by_phone", "false") == "true"
+        search_by_name = self.request.GET.get("search_by_name", "false") == "true"
+        search_by_comment = self.request.GET.get("search_by_comment", "false") == "true"
+
+        # Радиокнопки направления сорртировки по дате
+        order_by_date = self.request.GET.get("order_by_date", "desc")
+
+        # Чекбоксы статусов заказов
+        status_new = self.request.GET.get("status_new", "false") == "true"
+        status_confirmed = self.request.GET.get("status_confirmed", "false") == "true"
+        status_completed = self.request.GET.get("status_completed", "false") == "true"
+        status_cancelled = self.request.GET.get("status_cancelled", "false") == "true"
+
+        # Cоздаем базовый запрос
+        query = Order.objects.all()
+
+        # Создаем базовую Q
+        base_q = Q()
+
+        # Серия IF где мы модифицируем базовый запрос в зависимости от чекбоксов и радиокнопок
+
+        # Представим, что в Order у нас есть поле status формата choises с следующими значениями:
+        # new, confirmed, completed, cancelled
+        if q:
+            if search_by_phone:
+                base_q |= Q(phone__icontains=q)
+
+            if search_by_name:
+                base_q |= Q(name__icontains=q)
+
+            if search_by_comment:
+                base_q |= Q(comment__icontains=q)
+
+        # Ветвление по радиокнопкам направления сортировки по дате
+        if order_by_date == "asc":
+            query = query.order_by("created_at")
+        else:
+            query = query.order_by("-created_at")
+
+        # Ветвление по чекбоксам статуса заявок
+        if status_new:
+            base_q |= Q(status="new")
+
+        if status_confirmed:
+            base_q |= Q(status="confirmed")
+
+        if status_completed:
+            base_q |= Q(status="completed")
+
+        if status_cancelled:
+            base_q |= Q(status="cancelled")
+
+        # Объединяем базовый запрос и базовую Q
+        query = query.filter(base_q)
+
+        return query
+            
 
 
-def master_detail(request, master_id):
-    try:
-        master = [master for master in masters if master["id"] == master_id][0]
-
-    except IndexError:
-        return HttpResponse("Мастер не найден", status=404)
-
-    context = {
-        "master": master,
-        "title": f"Мастер {master['name']}",
-    }
-
-    return render(request, "master_detail.html", context)
 
 
-def master_list(request):
-    context = {
-        "masters": masters,
-        "title": "Наши мастера",
-    }
-    return render(request, "master_list.html", context)
+class MasterDetailView(DetailView):
+    model = Master
+    template_name = "master_detail.html"
+    pk_url_kwarg = "master_id"
 
+class MasterListView(ListView):
+    model = Master
+    template_name = "master_list.html"
+    context_object_name = "masters"
+    ordering = ["-name"]
 
-def thanks(request):
-    return render(request, "thanks.html")
+    def get_queryset(self):
+        # Определим мастеров у которых есть хотя бы одна услуга
+        masters = Master.objects.prefetch_related("services").filter(
+            services__isnull=False
+        ).distinct()
+        return masters
+
+class ThanksTemplateView(TemplateView):
+    template_name = "thanks.html"
+
 
 def review_create(request):
     if request.method == "GET":
@@ -193,24 +266,30 @@ def order_create(request):
         return redirect("thanks")
 
 
-from django.http import JsonResponse
-from .models import Master
-import json
+class MasterServicesView(View):
 
-def get_master_services(request):
-    if request.method == 'POST':
+    # def dispatch(self, request, *args, **kwargs):
+    #     """
+    #     Возвращаем ошибку если метод не POST
+    #     Это избыточно. Классовая вью и без этого вернет 405
+    #     """
+    #     if request.method != "POST":
+    #         return JsonResponse({"error": "Иди отдыхай"}, status=405)
+
+    def post(self, request, master_id):
         try:
             data = json.loads(request.body)
-            master_id = data.get('master_id')
+            master_id = data.get("master_id")
             master = Master.objects.get(id=master_id)
             services = master.services.all()
-            services_data = [{'id': service.id, 'name': service.name} for service in services]
-            return JsonResponse({'services': services_data})
+            services_data = [
+                {"id": service.id, "name": service.name} for service in services
+            ]
+            return JsonResponse({"services": services_data})
         except Master.DoesNotExist:
-            return JsonResponse({'error': 'Master not found'}, status=404)
+            return JsonResponse({"error": "Master not found"}, status=404)
         except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON'}, status=400)
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
 
 
 def order_update(request, order_id):

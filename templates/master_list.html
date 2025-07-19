@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 
-{{masters.0.name}}
-{{masters.1.name}}
-{{masters.2.name}}
-
 <div class="row g-3">
 {% for master in masters %}
 {% include "master_card_include.html" with emp=master %}
+
+
 {% empty %}
 <p class="text-danger">Нет мастеров для отображения</p>
 {% endfor %}

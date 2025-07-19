@@ -1,16 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
 from core.views import (
-    index,
-    landing,
-    master_detail,
-    master_list,
-    order_list,
-    thanks,
+    LandingView,
+    MasterDetailView,
+    MasterListView,
+    OrderListView,
+    ThanksTemplateView,
     order_create,
     order_update,
     review_create,
-    get_master_services
+    MasterServicesView,
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -19,15 +18,14 @@ from users import urls as users_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("ajax/get-master-services/", get_master_services, name="get_master_services"),
-    path("", landing, name="landing"),
-    path("index/", index, name="index"),
-    path("masters/", master_list, name="master_list"),
-    path("masters/<int:master_id>/", master_detail, name="master_detail"),
+    path("ajax/get-master-services/", MasterServicesView.as_view(), name="get_master_services"),
+    path("", LandingView.as_view(), name="landing"),
+    path("masters/", MasterListView.as_view(), name="master_list"),
+    path("masters/<int:master_id>/", MasterDetailView.as_view(), name="master_detail"),
     path("orders/create/", order_create, name="order_create"),
     path("orders/update/<int:order_id>/", order_update, name="order_update"),
-    path("orders/", order_list, name="order_list"),
-    path("thanks/", thanks, name="thanks"),
+    path("orders/", OrderListView.as_view(), name="order_list"),
+    path("thanks/", ThanksTemplateView.as_view(), name="thanks"),
     path("reviews/create/", review_create, name="review_create"),
 
     # Пользователи

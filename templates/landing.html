@@ -76,15 +76,7 @@
             <h2>Наши мастера</h2>
         </div>
         {% for master in masters %}
-            <div class="col-md-4 mb-4">
-                <div class="master-card">
-                    <h4>{{ master.name }}</h4>
-                    <p class="text-muted">Мастер барбер</p>
-                    <div class="mt-auto">
-                        <a href="{% url 'master_list' %}" class="btn btn-outline-primary">Подробнее</a>
-                    </div>
-                </div>
-            </div>
+            {% include "master_card_include.html" with emp=master %}
         {% endfor %}
     </section>
 
