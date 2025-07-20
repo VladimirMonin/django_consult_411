@@ -110,9 +110,14 @@ class OrderModelForm(forms.ModelForm):
                 attrs={"class": "form-control", "placeholder": "Комментарий"}
             ),
             "master": forms.Select(attrs={"class": "form-control"}),
-            "order_date": forms.SplitDateTimeWidget(
-                date_attrs={"class": "form-control", "type": "date"},
-                time_attrs={"class": "form-control", "type": "time"},
+            # "order_date": forms.SplitDateTimeWidget(
+            #     date_attrs={"class": "form-control", "type": "date"},
+            #     time_attrs={"class": "form-control", "type": "time"},
+            # ),
+
+            # Пробуем обычный вариант без Split
+            "order_date": forms.DateTimeInput(
+                attrs={"class": "form-control", "type": "datetime-local"}
             ),
             "services": forms.SelectMultiple(attrs={"class": "form-control"}),
         }
