@@ -33,8 +33,10 @@ document.addEventListener("DOMContentLoaded", function () {
         })
           .then((response) => response.json())
           .then((data) => {
+            console.log("Данные о мастере:", data);
             servicesSelect.innerHTML = ""; // Очищаем список услуг
             if (data.services) {
+              console.log("Полученные услуги:", data.services);
               data.services.forEach((service) => {
                 const option = document.createElement("option");
                 option.value = service.id;

@@ -188,6 +188,7 @@ class OrderUpdateView(UpdateView):
     form_class = OrderModelForm
     template_name = "order_form_class.html"
     success_url = reverse_lazy("order_list")
+    pk_url_kwarg = "order_id"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
