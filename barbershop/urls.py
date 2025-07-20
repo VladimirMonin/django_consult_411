@@ -8,7 +8,7 @@ from core.views import (
     ThanksTemplateView,
     order_create,
     order_update,
-    review_create,
+    ReviewCreateView,
     MasterServicesView,
 )
 from django.conf import settings
@@ -26,7 +26,7 @@ urlpatterns = [
     path("orders/update/<int:order_id>/", order_update, name="order_update"),
     path("orders/", OrderListView.as_view(), name="order_list"),
     path("thanks/", ThanksTemplateView.as_view(), name="thanks"),
-    path("reviews/create/", review_create, name="review_create"),
+    path("reviews/create/", ReviewCreateView.as_view(), name="review_create"),
 
     # Пользователи
     path("users/", include(users_urls)),
