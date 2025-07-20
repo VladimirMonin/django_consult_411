@@ -190,13 +190,13 @@ class MasterServicesView(View):
 
 
 
-class OrderUpdateView(PermissionRequiredMixin, UpdateView):
+class OrderUpdateView(AdminStaffRequiredMixin, UpdateView):
     model = Order
     form_class = OrderModelForm
     template_name = "order_form_class.html"
     success_url = reverse_lazy("order_list")
     pk_url_kwarg = "order_id"
-    permission_required = "core.change_order"
+    # permission_required = "core.change_order"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
