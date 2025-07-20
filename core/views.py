@@ -10,7 +10,7 @@ from .models import Order, Master, Service, Review
 
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import OrderForm, ReviewModelForm
+from .forms import OrderForm, ReviewModelForm, OrderModelForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -187,8 +187,7 @@ class ReviewCreateView(CreateView):
 
 def order_create(request):
     if request.method == "GET":
-        form = OrderForm()
-        # Контекст для передачи в шаблон
+        form = OrderModelForm()
         context = {
             "title": "Заявка на стрижку",
             "button_text": "Записаться",
@@ -197,32 +196,19 @@ def order_create(request):
         return render(request, "order_form_class.html", context)
 
     elif request.method == "POST":
-        # Валидация формы
-        form = OrderForm(request.POST)
-
-        # Если форма НЕ валидна, то возвращаем форму с ошибками
-        if not form.is_valid():
+        form = OrderModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Заявка успешно создана")
+            return redirect("thanks")
+        else:
             context = {
                 "title": "Заявка на стрижку",
                 "button_text": "Записаться",
                 "form": form,
             }
+            messages.error(request, "Форма заполнена некорректно")
             return render(request, "order_form_class.html", context)
-
-        # Создаем объект заявки
-        order = Order.objects.create(
-            name=form.cleaned_data["name"],
-            phone=form.cleaned_data["phone"],
-            comment=form.cleaned_data["comment"],
-            master=form.cleaned_data["master"],
-            order_date=form.cleaned_data["date_time"],
-        )
-
-        # Множественно установим связи M2M для услуг
-        order.services.set(form.cleaned_data["services"])
-
-        # Редирект на страницу благодарности
-        return redirect("thanks")
 
 
 class MasterServicesView(View):
@@ -252,56 +238,31 @@ class MasterServicesView(View):
 
 
 def order_update(request, order_id):
+    try:
+        order = Order.objects.get(id=order_id)
+    except ObjectDoesNotExist:
+        return HttpResponse("Заявка не найдена", status=404)
+
     if request.method == "GET":
-        # Получаем объект заявки
-        try:
-            order = Order.objects.get(id=order_id)
-        except ObjectDoesNotExist:
-            return HttpResponse("Заявка не найдена", status=404)
-
-        # Создаем форму и передаем в нее данные из объекта заявки
-        form = OrderForm(
-            initial={
-                "name": order.name,
-                "phone": order.phone,
-                "comment": order.comment,
-                "master": order.master,
-                "services": order.services.all(),
-                "date_time": order.order_date,
-            }
-        )
-
+        form = OrderModelForm(instance=order)
         context = {
             "title": "Редактирование заявки",
             "button_text": "Сохранить",
-            "order": order,
             "form": form,
         }
         return render(request, "order_form_class.html", context)
 
     elif request.method == "POST":
-        # Валидация формы
-        form = OrderForm(request.POST)
-
-        # Если форма НЕ валидна, то возвращаем форму с ошибками
-        if not form.is_valid():
+        form = OrderModelForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Заявка успешно обновлена")
+            return redirect("thanks")
+        else:
             context = {
                 "title": "Редактирование заявки",
                 "button_text": "Сохранить",
                 "form": form,
             }
-
+            messages.error(request, "Форма заполнена некорректно")
             return render(request, "order_form_class.html", context)
-
-        # Обновляем данные объекта заявки
-        order = Order.objects.get(id=order_id)
-        order.name = form.cleaned_data["name"]
-        order.phone = form.cleaned_data["phone"]
-        order.comment = form.cleaned_data["comment"]
-        order.master = form.cleaned_data["master"]
-        order.order_date = form.cleaned_data["date_time"]
-        order.services.set(form.cleaned_data["services"])
-        order.save()
-
-        # Редирект на страницу благодарности
-        return redirect("thanks")

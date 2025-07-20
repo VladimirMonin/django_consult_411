@@ -96,14 +96,19 @@ class OrderModelForm(forms.ModelForm):
         model = Order
         fields = ["name", "phone", "comment", "master", "order_date", "services"]
         widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Ваше имя"}
+            ),
             "phone": forms.TextInput(
                 attrs={
                     "class": "form-control",
+                    "placeholder": "Телефон: +79991234567 или 89991234567",
                     "pattern": r"^(\+7|8)\d{10}$",
                 }
             ),
-            "comment": forms.Textarea(attrs={"class": "form-control"}),
+            "comment": forms.Textarea(
+                attrs={"class": "form-control", "placeholder": "Комментарий"}
+            ),
             "master": forms.Select(attrs={"class": "form-control"}),
             "order_date": forms.SplitDateTimeWidget(
                 date_attrs={"class": "form-control", "type": "date"},
@@ -112,28 +117,28 @@ class OrderModelForm(forms.ModelForm):
             "services": forms.SelectMultiple(attrs={"class": "form-control"}),
         }
 
-        def clean_phone(self):
-            data = self.cleaned_data["phone"]
-            pattern = r"^(\+7|8)\d{10}$"
+    def clean_phone(self):
+        data = self.cleaned_data["phone"]
+        pattern = r"^(\+7|8)\d{10}$"
 
-            if not re.match(pattern, data):
-                raise ValidationError(
-                    "Номер телефона должен быть в формате 89123433333 или +79123433333"
-                )
-            return data
-        
-        def clean_services(self):
-            master = self.cleaned_data.get("master")
-            services = self.cleaned_data.get("services")
+        if not re.match(pattern, data):
+            raise ValidationError(
+                "Номер телефона должен быть в формате 89123433333 или +79123433333"
+            )
+        return data
 
-            if master and services:
-                master_services = master.services.all()
-                for service in services:
-                    if service not in master_services:
-                        raise ValidationError(
-                            f'Мастер {master} не предоставляет услугу "{service}".'
-                        )
-            return services
+    def clean_services(self):
+        master = self.cleaned_data.get("master")
+        services = self.cleaned_data.get("services")
+
+        if master and services:
+            master_services = master.services.all()
+            for service in services:
+                if service not in master_services:
+                    raise ValidationError(
+                        f'Мастер {master} не предоставляет услугу "{service}".'
+                    )
+        return services
 
 
 
