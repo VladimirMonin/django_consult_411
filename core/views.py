@@ -19,8 +19,17 @@ from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 import json
 
+# Импорт LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+
 
 from django.urls import reverse, reverse_lazy
+
+# Собственный класс проверяем юзер из став и юзер из админ
+
+class AdminStaffRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff and self.request.user.is_active
 
 
 class LandingView(View):
@@ -35,7 +44,7 @@ class LandingView(View):
 
 
 
-class OrderListView(ListView):
+class OrderListView(LoginRequiredMixin, ListView):
     model = Order
     template_name = "order_list.html"
     context_object_name = "orders"
@@ -107,8 +116,6 @@ class OrderListView(ListView):
 
         return query
             
-
-
 
 
 class MasterDetailView(DetailView):
@@ -183,12 +190,13 @@ class MasterServicesView(View):
 
 
 
-class OrderUpdateView(UpdateView):
+class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     model = Order
     form_class = OrderModelForm
     template_name = "order_form_class.html"
     success_url = reverse_lazy("order_list")
     pk_url_kwarg = "order_id"
+    permission_required = "core.change_order"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

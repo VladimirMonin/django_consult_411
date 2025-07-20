@@ -117,6 +117,7 @@ class OrderModelForm(forms.ModelForm):
 
             # Пробуем обычный вариант без Split
             "order_date": forms.DateTimeInput(
+                format="%Y-%m-%dT%H:%M",
                 attrs={"class": "form-control", "type": "datetime-local"}
             ),
             "services": forms.SelectMultiple(attrs={"class": "form-control"}),
