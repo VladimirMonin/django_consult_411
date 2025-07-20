@@ -131,35 +131,7 @@ class MasterListView(ListView):
 
 class ThanksTemplateView(TemplateView):
     template_name = "thanks.html"
-
-
-def review_create(request):
-    if request.method == "GET":
-        form = ReviewModelForm()
-        context = {
-            "title": "Оставить отзыв",
-            "button_text": "Отправить отзыв",
-            "form": form,
-        }
-        return render(request, "review_form.html", context)
-
-    elif request.method == "POST":
-        form = ReviewModelForm(request.POST, request.FILES)
-        if not form.is_valid():
-            context = {
-                "title": "Оставить отзыв",
-                "button_text": "Отправить отзыв",
-                "form": form,
-            }
-            # Отправка сообщения об ошибке
-            messages.error(request, "Форма заполнена некорректно")
-            return render(request, "review_form.html", context)
-
-        form.save()
-        # Отправка сообщения об успешной отправке
-        messages.success(request, "Отзыв успешно отправлен")
-        return redirect("thanks")
-    
+ 
 
 class ReviewCreateView(CreateView):
     # model = Review
@@ -182,33 +154,6 @@ class ReviewCreateView(CreateView):
         # Отправляем сообщение об ошибке
         messages.error(self.request, "Форма заполнена некорректно")
         return super().form_invalid(form)
-
-
-
-def order_create(request):
-    if request.method == "GET":
-        form = OrderModelForm()
-        context = {
-            "title": "Заявка на стрижку",
-            "button_text": "Записаться",
-            "form": form,
-        }
-        return render(request, "order_form_class.html", context)
-
-    elif request.method == "POST":
-        form = OrderModelForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Заявка успешно создана")
-            return redirect("thanks")
-        else:
-            context = {
-                "title": "Заявка на стрижку",
-                "button_text": "Записаться",
-                "form": form,
-            }
-            messages.error(request, "Форма заполнена некорректно")
-            return render(request, "order_form_class.html", context)
 
 
 class MasterServicesView(View):
@@ -237,32 +182,44 @@ class MasterServicesView(View):
             return JsonResponse({"error": "Invalid JSON"}, status=400)
 
 
-def order_update(request, order_id):
-    try:
-        order = Order.objects.get(id=order_id)
-    except ObjectDoesNotExist:
-        return HttpResponse("Заявка не найдена", status=404)
 
-    if request.method == "GET":
-        form = OrderModelForm(instance=order)
-        context = {
-            "title": "Редактирование заявки",
-            "button_text": "Сохранить",
-            "form": form,
-        }
-        return render(request, "order_form_class.html", context)
+class OrderUpdateView(UpdateView):
+    model = Order
+    form_class = OrderModelForm
+    template_name = "order_form_class.html"
+    success_url = reverse_lazy("order_list")
 
-    elif request.method == "POST":
-        form = OrderModelForm(request.POST, instance=order)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Заявка успешно обновлена")
-            return redirect("thanks")
-        else:
-            context = {
-                "title": "Редактирование заявки",
-                "button_text": "Сохранить",
-                "form": form,
-            }
-            messages.error(request, "Форма заполнена некорректно")
-            return render(request, "order_form_class.html", context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Редактирование заявки"
+        context["button_text"] = "Сохранить"
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Заявка успешно обновлена")
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, "Форма заполнена некорректно")
+        return super().form_invalid(form)
+    
+
+class OrderCreateView(CreateView):
+    model = Order
+    form_class = OrderModelForm
+    template_name = "order_form_class.html"
+    success_url = reverse_lazy("order_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Создание заявки"
+        context["button_text"] = "Сохранить"
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Заявка успешно создана")
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, "Форма заполнена некорректно")
+        return super().form_invalid(form)
