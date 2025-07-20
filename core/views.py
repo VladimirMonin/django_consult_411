@@ -166,7 +166,7 @@ class MasterServicesView(View):
     #     if request.method != "POST":
     #         return JsonResponse({"error": "Иди отдыхай"}, status=405)
 
-    def post(self, request, master_id):
+    def post(self, request):
         try:
             data = json.loads(request.body)
             master_id = data.get("master_id")
