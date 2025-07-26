@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
@@ -37,3 +37,16 @@ class CustomAuthenticationForm(AuthenticationForm):
         self.fields["password"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Пароль"}
         )
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["old_password"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Старый пароль"}
+            )
+        self.fields["new_password1"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Новый пароль"}
+            )
+        self.fields["new_password2"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Подтвердите новый пароль"}
+            )

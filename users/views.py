@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.views.decorators.http import require_POST
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
-from django.contrib.auth.views import LogoutView, LoginView
+from .forms import (
+    CustomUserCreationForm,
+    CustomAuthenticationForm,
+    CustomPasswordChangeForm,
+)
+from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
 from django.contrib import messages
+
 
 def register(request):
     if request.method == "POST":
@@ -15,6 +20,12 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, "users/register.html", {"form": form})
+
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = "users/change_password.html"
+    form_class = CustomPasswordChangeForm
+    success_url = "/"
 
 
 class CustomLoginView(LoginView):
@@ -36,8 +47,6 @@ class CustomLoginView(LoginView):
         messages.error(self.request, "Неверное имя пользователя или пароль.")
         # Вызываем родительский метод, который снова рендерит страницу с формой
         return super().form_invalid(form)
-    
-
 
 
 class CustomLogoutView(LogoutView):
