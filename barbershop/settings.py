@@ -156,3 +156,13 @@ LOGIN_URL = reverse_lazy("login")
 # Стандартные переадресации для авторизации, логаута
 LOGIN_REDIRECT_URL = reverse_lazy("landing")
 LOGOUT_REDIRECT_URL = reverse_lazy("landing")
+
+
+# Время жизни сессии в секундах (3 дня)
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 3 # 60 секунд * 60 минут * 24 часа * 3 день
+
+# Продлевать жизнь сессии при каждом запросе от пользователя
+SESSION_SAVE_EVERY_REQUEST = True
+
+# (Опционально) Выходить из системы при закрытии браузера
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
