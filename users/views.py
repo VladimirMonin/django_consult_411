@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.views.decorators.http import require_POST
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
-
+from django.contrib.auth.views import LogoutView, LoginView
+from django.contrib import messages
 
 def register(request):
     if request.method == "POST":
@@ -16,19 +17,28 @@ def register(request):
     return render(request, "users/register.html", {"form": form})
 
 
-def login(request):
-    if request.method == "POST":
-        form = CustomAuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            auth_login(request, user)
-            return redirect(request.GET.get("next", "landing"))
-    else:
-        form = CustomAuthenticationForm()
-    return render(request, "users/login.html", {"form": form})
+class CustomLoginView(LoginView):
+    template_name = "users/login.html"
+    authentication_form = CustomAuthenticationForm
+
+    def form_valid(self, form):
+        """Вызывается при успешной аутентификации."""
+        # Получаем залогиненного пользователя
+        user = form.get_user()
+        # Добавляем сообщение об успехе
+        messages.success(self.request, f"Добро пожаловать, {user.username}!")
+        # Вызываем родительский метод, который выполняет вход и редирект
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        """Вызывается, если форма невалидна (ошибка входа)."""
+        # Добавляем сообщение об ошибке
+        messages.error(self.request, "Неверное имя пользователя или пароль.")
+        # Вызываем родительский метод, который снова рендерит страницу с формой
+        return super().form_invalid(form)
+    
 
 
-@require_POST
-def logout(request):
-    auth_logout(request)
-    return redirect("landing")
+
+class CustomLogoutView(LogoutView):
+    next_page = "landing"

@@ -1,5 +1,7 @@
 from pathlib import Path
 import os
+from django.conf.global_settings import LOGOUT_REDIRECT_URL
+from django.urls.converters import REGISTERED_CONVERTERS
 from dotenv import load_dotenv
 from django.urls import reverse_lazy
 # Загружаем переменные окружения из файла .env
@@ -150,3 +152,7 @@ TELEGRAM_USER_ID = os.getenv("TELEGRAM_USER_ID")
 
 # Маршруты для авторизации
 LOGIN_URL = reverse_lazy("login")
+
+# Стандартные переадресации для авторизации, логаута
+LOGIN_REDIRECT_URL = reverse_lazy("landing")
+LOGOUT_REDIRECT_URL = reverse_lazy("landing")
