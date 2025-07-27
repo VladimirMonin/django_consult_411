@@ -5,7 +5,8 @@ from .views import (
     CustomLogoutView,
     CustomPasswordChangeView,
     RegisterView,
-    CustomPasswordResetView
+    CustomPasswordResetView,
+    CustomPasswordResetDoneView
 )
 
 
@@ -20,4 +21,6 @@ urlpatterns = [
     # СБРОС И ВОССТАНОВЛЕНИЕ ПАРОЛЯ
     # Шаг 2. Форма ввода емейла для сброса пароля
     path("password-reset/", CustomPasswordResetView.as_view(), name="password_reset_form"),
+    # Шаг 3. Вью password-reset/done/ - уведомление об отправке инструкций по сбросу пароля
+    path("password-reset/done/", CustomPasswordResetDoneView.as_view(), name="password_reset_done"),
 ]

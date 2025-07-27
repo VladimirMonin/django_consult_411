@@ -27,10 +27,21 @@ from django.contrib.auth.forms import (
 )
 
 class CustomPasswordResetView(PasswordResetView):
+    """
+    Шаг 2. - Старт процесса сброса пароля - ввод email пользователя
+    """
     template_name = "users/password_reset_form.html"
     form_class = CustomPasswordResetForm
     success_url = "/users/password_reset_done/"
     email_template_name = "users/password_reset_email.html"
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    """
+    Шаг 3. - Страничка уведомления об отправке инструкций по сбросу пароля
+    """
+    template_name = "users/password_reset_done.html"
+    #TODO - Есть ли тут success_url?
 
 
 class RegisterView(CreateView):
