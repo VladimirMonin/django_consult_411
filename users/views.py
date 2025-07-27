@@ -17,9 +17,17 @@ from .forms import (
     CustomAuthenticationForm,
     CustomPasswordChangeForm,
     CustomPasswordResetForm,
-    CustomSetPasswordForm
+    CustomSetPasswordForm,
 )
-from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView, PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView
+from django.contrib.auth.views import (
+    LogoutView,
+    LoginView,
+    PasswordChangeView,
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
+)
 from django.contrib import messages
 
 from django.views.generic.edit import CreateView
@@ -28,10 +36,12 @@ from django.contrib.auth.forms import (
     PasswordResetForm,
 )
 
+
 class CustomPasswordResetView(PasswordResetView):
     """
     Шаг 2. - Старт процесса сброса пароля - ввод email пользователя
     """
+
     template_name = "users/password_reset_form.html"
     form_class = CustomPasswordResetForm
     success_url = "/users/password_reset_done/"
@@ -42,14 +52,25 @@ class CustomPasswordResetDoneView(PasswordResetDoneView):
     """
     Шаг 3. - Страничка уведомления об отправке инструкций по сбросу пароля
     """
+
     template_name = "users/password_reset_done.html"
-    #TODO - Есть ли тут success_url?
+    # TODO - Есть ли тут success_url?
+
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     """Шаг 5. - Ввод нового пароля"""
+
     template_name = "users/password_reset_confirm.html"
     form_class = CustomSetPasswordForm
     success_url = reverse_lazy("password_reset_complete")
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    """
+    Шаг 6. Сообщение об успешной смене пароля
+    """
+
+    template_name = "users/password_reset_complete.html"
 
 
 class RegisterView(CreateView):
