@@ -166,3 +166,6 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 # (Опционально) Выходить из системы при закрытии браузера
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Настройка для вывода писем в консоль
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
