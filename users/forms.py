@@ -3,11 +3,31 @@ from django.contrib.auth.forms import (
     UserCreationForm,
     AuthenticationForm,
     PasswordChangeForm,
+    PasswordResetForm,
 )
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 user_model = get_user_model()
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    """
+    Форма для сброса пароля по email. Шаг 2.
+    Ввод емейла аккаунта для старта процесса сброса пароля.
+    """
+
+    email = forms.EmailField(
+        label="Email",
+        required=True,
+        widget=forms.EmailInput(attrs={"autocomplete": "email"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs["class"] = "form-control"
+            field.widget.attrs["placeholder"] = field.label or ""
 
 
 class CustomUserCreationForm(UserCreationForm):

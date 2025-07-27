@@ -8,7 +8,6 @@ PasswordResetConfirmView - для ввода нового пароля (когд
 PasswordResetCompleteView - для уведомления об успешном сбросе пароля
 """
 
-ё
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.views.decorators.http import require_POST
@@ -16,12 +15,22 @@ from .forms import (
     CustomUserCreationForm,
     CustomAuthenticationForm,
     CustomPasswordChangeForm,
+    CustomPasswordResetForm,
 )
 from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView, PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView
 from django.contrib import messages
 
 from django.views.generic.edit import CreateView
 
+from django.contrib.auth.forms import (
+    PasswordResetForm,
+)
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = "users/password_reset_form.html"
+    form_class = CustomPasswordResetForm
+    success_url = "/users/password_reset_done/"
+    email_template_name = "users/password_reset_email.html"
 
 
 class RegisterView(CreateView):
