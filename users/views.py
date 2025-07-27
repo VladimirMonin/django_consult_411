@@ -9,17 +9,32 @@ from .forms import (
 from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
 from django.contrib import messages
 
+from django.views.generic.edit import CreateView
 
-def register(request):
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            auth_login(request, user)
-            return redirect("landing")
-    else:
-        form = CustomUserCreationForm()
-    return render(request, "users/register.html", {"form": form})
+
+
+class RegisterView(CreateView):
+    template_name = "users/register.html"
+    form_class = CustomUserCreationForm
+    success_url = "/"
+
+    def form_valid(self, form):
+        # Сохраняем пользователя
+        user = form.save()
+        # Message
+        messages.success(
+            self.request,
+            f"Добро пожаловать, {user.username}! Вы успешно зарегистрировались.",
+        )
+        # Выполяем авторизацию
+        auth_login(self.request, user)
+        # Вызываем родительский метод
+        return redirect("landing")
+
+    def form_invalid(self, form):
+        # Добавляем сообщение об ошибке
+        messages.error(self.request, "Пожалуйста, исправьте ошибки в форме.")
+        return super().form_invalid(form)
 
 
 class CustomPasswordChangeView(PasswordChangeView):
