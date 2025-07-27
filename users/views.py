@@ -1,3 +1,14 @@
+"""
+LoginView - служебный класс для входа в систему
+LogoutView - служебный класс для выхода из системы
+PasswordChangeView - служебный класс для смены пароля (когда вводят и старый и новый)
+PasswordResetView - служебный класс для сброса пароля (когда вводят только email) работает в паре с PasswordResetForm
+PasswordResetDoneView - для уведомления об отправке инструкций по сбросу пароля
+PasswordResetConfirmView - для ввода нового пароля (когда вводят новый пароль) работает в паре с SetPasswordForm
+PasswordResetCompleteView - для уведомления об успешном сбросе пароля
+"""
+
+ё
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.views.decorators.http import require_POST
@@ -6,7 +17,7 @@ from .forms import (
     CustomAuthenticationForm,
     CustomPasswordChangeForm,
 )
-from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
+from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView, PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView
 from django.contrib import messages
 
 from django.views.generic.edit import CreateView
@@ -38,7 +49,7 @@ class RegisterView(CreateView):
 
 
 class CustomPasswordChangeView(PasswordChangeView):
-    template_name = "users/change_password.html"
+    template_name = "users/password_change_form.html"
     form_class = CustomPasswordChangeForm
     success_url = "/"
 

@@ -14,6 +14,7 @@ urlpatterns = [
     path("login/", CustomLoginView.as_view(), name="login"),
     path("logout/", CustomLogoutView.as_view(), name="logout"),
     path(
-        "change-password/", CustomPasswordChangeView.as_view(), name="change_password"
+        "change-password/", CustomPasswordChangeView.as_view(), name="password_change_form"
     ),
+    # СБРОС И ВОССТАНОВЛЕНИЕ ПАРОЛЯ
 ]

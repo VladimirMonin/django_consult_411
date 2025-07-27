@@ -351,7 +351,7 @@ from django.urls import reverse_lazy
 
 class CustomPasswordChangeView(PasswordChangeView):
     form_class = PasswordChangeForm # Можно использовать кастомную, стилизованную форму
-    template_name = 'users/change_password.html'
+    template_name = 'users/password_change_form.html'
     success_url = reverse_lazy('password_change_done') # URL страницы "Пароль успешно изменен"
 ```
 
