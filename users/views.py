@@ -9,6 +9,7 @@ PasswordResetCompleteView - для уведомления об успешном 
 """
 
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.views.decorators.http import require_POST
 from .forms import (
@@ -16,6 +17,7 @@ from .forms import (
     CustomAuthenticationForm,
     CustomPasswordChangeForm,
     CustomPasswordResetForm,
+    CustomSetPasswordForm
 )
 from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView, PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView
 from django.contrib import messages
@@ -42,6 +44,12 @@ class CustomPasswordResetDoneView(PasswordResetDoneView):
     """
     template_name = "users/password_reset_done.html"
     #TODO - Есть ли тут success_url?
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    """Шаг 5. - Ввод нового пароля"""
+    template_name = "users/password_reset_confirm.html"
+    form_class = CustomSetPasswordForm
+    success_url = reverse_lazy("password_reset_complete")
 
 
 class RegisterView(CreateView):

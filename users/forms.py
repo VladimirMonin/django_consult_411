@@ -4,12 +4,23 @@ from django.contrib.auth.forms import (
     AuthenticationForm,
     PasswordChangeForm,
     PasswordResetForm,
+    SetPasswordForm,
 )
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 user_model = get_user_model()
 
+class CustomSetPasswordForm(SetPasswordForm):
+    """
+    Форма для сброса пароля по email. Шаг 5.
+    Ввод нового пароля без указания старого.
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs["class"] = "form-control"
+            field.widget.attrs["placeholder"] = field.label or ""
 
 class CustomPasswordResetForm(PasswordResetForm):
     """
