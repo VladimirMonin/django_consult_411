@@ -168,4 +168,18 @@ SESSION_SAVE_EVERY_REQUEST = True
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Настройка для вывода писем в консоль
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "vladimir.monin2016@yandex.ru"
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = "vladimir.monin2016@yandex.ru"
+SERVER_EMAIL = "vladimir.monin2016@yandex.ru"
+EMAIL_ADMIN = "vladimir.monin2016@yandex.ru"
+
+
+# Кастомная модель пользователя
+AUTH_USER_MODEL = "users.CustomUser"
