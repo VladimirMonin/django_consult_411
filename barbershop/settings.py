@@ -21,7 +21,7 @@ ALLOWED_HOSTS = [
     "193.164.149.147",
     "192.168.0.4",
     "vladimirmonin-django-consult-411-165a.twc1.net",
-    "http://vladimirmonin-django-consult-411-165a.twc1.net/"
+    "http://vladimirmonin-django-consult-411-165a.twc1.net"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -123,7 +123,7 @@ USE_TZ = True
 # Это константа для пути к статическим файлам (на сайте!)
 STATIC_URL = "static/"
 # Это константа для пути к статическим файлам (на сервере)
-# STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Дополнительные директории для поиска статических файлов во время разработки
 # Потому что у нас статика лежит в корне проекта в папке static
