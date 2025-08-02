@@ -36,10 +36,9 @@ class OrderForm(forms.Form):
     )
     master = forms.ModelChoiceField(
         label="Мастер",
-        queryset=Master.objects.all(),
+        queryset=Master.objects.none(),  # Устанавливаем пустой queryset
         required=False,
         widget=forms.Select(attrs={"class": "form-control"}),
-        initial=Master.objects.get(first_name__contains="Алевтина"),
     )
 
     # Split для дата-время
@@ -56,6 +55,18 @@ class OrderForm(forms.Form):
         queryset=Service.objects.all(),
         widget=forms.SelectMultiple(attrs={"class": "form-control"}),
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        master_field = self.fields["master"]
+        if isinstance(master_field, forms.ModelChoiceField):
+            master_field.queryset = Master.objects.all()
+            try:
+                master_field.initial = Master.objects.get(
+                    first_name__contains="Алевтина"
+                )
+            except (Master.DoesNotExist, Master.MultipleObjectsReturned):
+                pass
 
     def clean(self):
         cleaned_data = super().clean()
