@@ -4,6 +4,7 @@ from django.conf.global_settings import LOGOUT_REDIRECT_URL
 from django.urls.converters import REGISTERED_CONVERTERS
 from dotenv import load_dotenv
 from django.urls import reverse_lazy
+
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 
@@ -21,7 +22,6 @@ ALLOWED_HOSTS = [
     "193.164.149.147",
     "192.168.0.4",
     "vladimirmonin-django-consult-411-165a.twc1.net",
-    "http://vladimirmonin-django-consult-411-165a.twc1.net"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -35,7 +35,7 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
-    # "jazzmin",
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -123,7 +123,7 @@ USE_TZ = True
 # Это константа для пути к статическим файлам (на сайте!)
 STATIC_URL = "static/"
 # Это константа для пути к статическим файлам (на сервере)
-STATIC_ROOT = BASE_DIR / 'static_prod'
+STATIC_ROOT = BASE_DIR / "static_prod"
 
 # Дополнительные директории для поиска статических файлов во время разработки
 # Потому что у нас статика лежит в корне проекта в папке static
@@ -162,7 +162,6 @@ TELEGRAM_BOT_API_KEY = os.getenv("TELEGRAM_BOT_API_KEY")
 TELEGRAM_USER_ID = os.getenv("TELEGRAM_USER_ID")
 
 
-
 # Маршруты для авторизации
 LOGIN_URL = reverse_lazy("login")
 
@@ -172,7 +171,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy("landing")
 
 
 # Время жизни сессии в секундах (3 дня)
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 3 # 60 секунд * 60 минут * 24 часа * 3 день
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 3  # 60 секунд * 60 минут * 24 часа * 3 день
 
 # Продлевать жизнь сессии при каждом запросе от пользователя
 SESSION_SAVE_EVERY_REQUEST = True
