@@ -14,10 +14,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "193.164.149.147",
+    "192.168.0.4",
+    "vladimirmonin-django-consult-411-165a.twc1.net",
+    "http://vladimirmonin-django-consult-411-165a.twc1.net/"
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://193.164.149.147",
+    "http://192.168.0.4",
+    "http://vladimirmonin-django-consult-411-165a.twc1.net",
+]
 
 # Application definition
 
@@ -173,12 +185,12 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_PORT = 465
-EMAIL_HOST_USER = "vladimir.monin2016@yandex.ru"
+EMAIL_HOST_USER = os.getenv("EMAIL")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_SSL = True
-DEFAULT_FROM_EMAIL = "vladimir.monin2016@yandex.ru"
-SERVER_EMAIL = "vladimir.monin2016@yandex.ru"
-EMAIL_ADMIN = "vladimir.monin2016@yandex.ru"
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL")
+SERVER_EMAIL = os.getenv("EMAIL")
+EMAIL_ADMIN = os.getenv("EMAIL")
 
 
 # Кастомная модель пользователя
