@@ -29,6 +29,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://193.164.149.147",
     "http://192.168.0.4",
     "http://vladimirmonin-django-consult-411-165a.twc1.net",
+    "https://vladimirmonin-django-consult-411-165a.twc1.net",
 ]
 
 # Application definition
